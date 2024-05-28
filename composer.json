@@ -12,6 +12,9 @@
             "iProtek\\SmsSender\\": "src/"
         }
     },
+    "require": {
+        "php": ">=7.0.0"
+    },
     "extra": {
         "laravel": {
             "providers": [
