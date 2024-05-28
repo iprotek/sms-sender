@@ -1,0 +1,22 @@
+{
+    "name": "iprotek/sms-sender",
+    "description": "A simple example package",
+    "authors": [
+        {
+            "name": "Joseph Aguilar",
+            "email": "admin@iprotek.net"
+        }
+    ],
+    "autoload": {
+        "psr-4": {
+            "iProtek\\SmsSender\\": "src/"
+        }
+    },
+    "extra": {
+        "laravel": {
+            "providers": [
+                "iProtek\\SmsSender\\SmsSenderPackageServiceProvider"
+            ]
+        }
+    }
+}
