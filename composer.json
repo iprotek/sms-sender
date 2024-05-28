@@ -15,14 +15,13 @@
     "require": {
         "php": ">=7.0.0"
     },
-    "minimum-stability": "dev",
     "type": "library",  
     "license": "MIT", 
     "require-dev": {
         "phpunit/phpunit": "~6.0 || ~7.0 || ~9.0"
     },
     "suggest": {
-        "ext-intl": "Use Intl for transliterator_transliterate() support"
+        "ext-intl": "Use this for sending sms connecting to SMS Server of iprotek"
     }, 
     "extra": {
         "laravel": {
