@@ -1,6 +1,6 @@
 {
     "name": "iprotek/sms-sender",
-    "description": "A simple example package",
+    "description": "A simple example package for important messaging",
     "keywords": ["laravel", "plugin", "sms-sender"],
     "authors": [
         {
