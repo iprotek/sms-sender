@@ -5,7 +5,7 @@ use iProtek\SmsSender\Http\Controllers\SmsController;
 
 Route::middleware(['web'])->group(function(){
  
-    Route::middleware(['auth'])->prefix('manage/sms-sender')->name('manage.sys-notification')->group(function(){
+    Route::middleware(['auth'])->prefix('manage/sms-sender')->name('manage.sms-sender')->group(function(){
         //Route::get('/test', [SysNotificationController::class, 'index'])->name('.test');
         //Route::get('/', [SysNotificationController::class, 'index'])->name('.index');
         //Route::get('/system-updates', [SysNotificationController::class, 'system_updates'])->name('.system-updates');
@@ -14,7 +14,8 @@ Route::middleware(['web'])->group(function(){
         //Route::get('/system-updates-summary', [SysNotificationController::class, 'system_updates_summary'])->name('.check-system-summary');
         //Route::post('/apply-system-updates', [SysNotificationController::class, 'apply_system_updates'])->name('.apply-system-updates');
      
-        Route::get('/', [SmsController::class, 'index'])->name('.index'); 
+        //Route::get('/', [SmsController::class, 'index'])->name('.index'); 
+        Route::get('/push-notif-info', [SmsController::class, 'push_notif_info'])->name('.push-notif-info'); 
 
     });
   
