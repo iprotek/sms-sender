@@ -26,6 +26,7 @@ class SmsTicket extends Model
 
         "cater_by_id",
         "cater_by_name",
+        "cater_at",
 
         "current_status_id"
     
@@ -49,4 +50,11 @@ class SmsTicket extends Model
         return $this->updated_at->diffForHumans();
 
     }
+
+    public function status(){
+        return $this->hasOne(\iProtek\SmsSender\Models\SmsTicketStatus::class, 'sms_ticket_id')->orderBy('id', 'DESC');
+    }
+
+
+
 }

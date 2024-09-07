@@ -11,9 +11,9 @@ class SmsTicketMessage extends Model
 
     public $fillable = [
         "sms_ticket_id",
-        "status_id",
-        "status_name",
-        "remarks",
-        "created_by"
+        "message",
+        "chat_by",
+        "chat_by_email",
+        "chat_by_name"
     ];
 }

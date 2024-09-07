@@ -37,6 +37,7 @@ class CreateSmsTicketsTable extends Migration
             //CATERER
             $table->integer('cater_by_id')->default(0);
             $table->string('cater_by_name')->nullable();
+            $table->dateTime('cater_at')->nullable();
 
             //
             $table->integer('current_status_id')->default(0);
