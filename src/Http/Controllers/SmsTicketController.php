@@ -11,11 +11,24 @@ class SmsTicketController extends _CommonController
     //
     public $guard = 'admin';
     public function list(Request $request){
-        return SmsTicket::paginate(10);
+        $tickets = SmsTicket::on();
+
+        $tickets->orderBy('current_status_id', 'ASC')->orderBy('cater_by_id', 'ASC')->orderBy('updated_at', 'DESC');
+        $tickets->with(['creator'=>function($q){
+            $q->select('id', 'name', 'contact_no', 'email');
+        }]);
+        if($request->action == 'notification'){
+            $tickets->where('current_status_id', 0);
+        }
+
+
+        return $tickets->paginate(10);
     }
 
     public function get_info(Request $request, SmsTicket $id){
-        return $id;
+        return SmsTicket::with(['creator'=>function($q){
+            $q->select('id', 'name', 'contact_no', 'email');
+        }])->find($id->id); 
     }
 
     public function add(Request $request){

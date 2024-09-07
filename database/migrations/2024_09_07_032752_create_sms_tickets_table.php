@@ -35,7 +35,7 @@ class CreateSmsTicketsTable extends Migration
             $table->string('customer_contact_no')->nullable();
 
             //CATERER
-            $table->integer('cater_by_id')->nullable();
+            $table->integer('cater_by_id')->default(0);
             $table->string('cater_by_name')->nullable();
 
             //

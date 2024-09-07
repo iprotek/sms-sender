@@ -30,4 +30,23 @@ class SmsTicket extends Model
         "current_status_id"
     
     ];
+
+
+    public $appends = [
+        "created_diff",
+        "updated_diff"
+    ];
+
+    public function creator(){
+        return $this->belongsTo(\iProtek\Core\Models\UserAdmin::class,'created_by');
+    }
+
+    public function getCreatedDiffAttribute(){
+        return $this->created_at->diffForHumans();
+    }
+
+    public function getUpdatedDiffAttribute(){
+        return $this->updated_at->diffForHumans();
+
+    }
 }
