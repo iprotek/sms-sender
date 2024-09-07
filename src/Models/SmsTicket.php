@@ -25,7 +25,9 @@ class SmsTicket extends Model
         "customer_contact_no",
 
         "cater_by_id",
-        "cater_by_name"
+        "cater_by_name",
+
+        "current_status_id"
     
     ];
 }
