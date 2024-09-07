@@ -25,7 +25,11 @@ class SmsSenderPackageServiceProvider extends ServiceProvider
     {
         // Bootstrap package services
         $this->loadMigrationsFrom(__DIR__.'/../database/migrations');
-        $this->loadRoutesFrom(__DIR__.'/routes/web.php');
+        $this->loadRoutesFrom(__DIR__.'/../routes/web.php');
         $this->loadViewsFrom(__DIR__.'/../resources/views', 'sms-sender');
+
+        $this->mergeConfigFrom(
+            __DIR__ . '/../config/iprotek.php', 'iprotek_sms_sender'
+        );
     }
 }

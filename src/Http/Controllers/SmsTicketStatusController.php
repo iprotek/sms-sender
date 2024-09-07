@@ -1,6 +1,6 @@
 <?php
 
-namespace Protek\SmsSender\Http\Controllers;
+namespace iProtek\SmsSender\Http\Controllers;
 
 use Illuminate\Http\Request;
 

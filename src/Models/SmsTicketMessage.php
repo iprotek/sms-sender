@@ -1,6 +1,6 @@
 <?php
 
-namespace Protek\SmsSender\Models;
+namespace iProtek\SmsSender\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;

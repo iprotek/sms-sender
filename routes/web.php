@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route; 
 use iProtek\SmsSender\Http\Controllers\SmsController;
+use iProtek\SmsSender\Http\Controllers\SmsTicketController;
 
 Route::middleware(['web'])->group(function(){
  
@@ -16,6 +17,15 @@ Route::middleware(['web'])->group(function(){
      
         //Route::get('/', [SmsController::class, 'index'])->name('.index'); 
         Route::get('/push-notif-info', [SmsController::class, 'push_notif_info'])->name('.push-notif-info'); 
+
+        //TICKETS
+        Route::prefix('ticket')->group(function(){
+            Route::get('list', [SmsTicketController::class, 'list'])->name('.push-notif-info'); 
+            Route::get('get-info/{id}', [SmsTicketController::class, 'get_info'])->name('.get-info'); 
+            Route::post('add', [SmsTicketController::class, 'add'])->name('.add'); 
+            Route::put('update', [SmsTicketController::class, 'update'])->name('.update'); 
+            Route::delete('delete/{id}', [SmsTicketController::class, 'remove'])->name('.delete'); 
+        });
 
     });
   
