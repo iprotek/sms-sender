@@ -40,7 +40,9 @@ class CreateSmsTicketsTable extends Migration
             $table->dateTime('cater_at')->nullable();
 
             //
-            $table->integer('current_status_id')->default(0);
+            $table->integer('current_status_id')->default(0); //response_url
+            
+            $table->text('response_url')->nullable();
 
 
         });

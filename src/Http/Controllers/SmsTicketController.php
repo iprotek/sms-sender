@@ -175,5 +175,22 @@ class SmsTicketController extends _CommonController
     }
 
 
+    public function response_view(Request $request, SmsTicket $id ){
+        return "123";
+    }
+
+    public function response_post(Request $request, SmsTicket $id ){
+
+        //action - cater
+
+
+        //action - chat
+
+
+
+        return [ "status"=>1, "message"=>"Done Responding"];
+    }
+
+
 
 }

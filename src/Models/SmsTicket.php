@@ -28,15 +28,21 @@ class SmsTicket extends Model
         "cater_by_name",
         "cater_at",
 
-        "current_status_id"
+        "current_status_id",
+        "response_url"
     
     ];
 
 
     public $appends = [
         "created_diff",
-        "updated_diff"
+        "updated_diff",
+        "message_count"
     ];
+
+    public function getMessageCountAttribute(){
+        return \iProtek\SmsSender\Models\SmsTicketMessage::where('sms_ticket_id', $this->id)->count();
+    }
 
     public function creator(){
         return $this->belongsTo(\iProtek\Core\Models\UserAdmin::class,'created_by');
