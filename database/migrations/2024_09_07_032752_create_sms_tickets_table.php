@@ -21,7 +21,7 @@ class CreateSmsTicketsTable extends Migration
 
             $table->string('title');
             $table->longText('details');
-            $table->integer('created_by');
+            $table->integer('created_by'); //0-means from customer
             $table->integer('updated_by')->nullable();
             $table->string('app_url');
             $table->string('app_name');
