@@ -188,19 +188,27 @@ class SmsTicketController extends _CommonController
 
 
     public function response_view(Request $request, SmsTicket $id ){
-        return "123";
+
+        $data = SmsTicket::with(['status'])->find($id->id);
+
+        return view( 'iprotek_sms_sender::system-support',["data"=>$data] );
+        //return "123";
     }
 
     public function response_post(Request $request, SmsTicket $id ){
+        $data = SmsTicket::with(['status'])->find($id->id);
 
         //action - cater
+        if($request->action == 'cater'){
+            return ["status"=>1, "message"=>"You had successfully Catered"];
+        }
 
 
         //action - chat
 
 
-
-        return [ "status"=>1, "message"=>"Done Responding"];
+        return ["status"=>0, "message"=>""];
+        //return view( 'iprotek_sms_sender::system-support' , ["data"=>$data]);;
     }
 
 
