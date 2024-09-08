@@ -31,6 +31,11 @@ Route::middleware(['web'])->group(function(){
             Route::get('response/{id}', [SmsTicketController::class, 'response_view'])->name('.response-get');
             Route::post('response/{id}', [SmsTicketController::class, 'response_post'])->name('.response-post');
         });
+        
+        Route::middleware(['throttle:10,1'])->group(function(){
+            Route::get('create', [SmsTicketController::class, 'create_get'])->name('.create-get');
+            Route::post('create', [SmsTicketController::class, 'create_post'])->name('.create-post');
+         });
 
     });
   

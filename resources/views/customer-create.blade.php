@@ -1,5 +1,5 @@
 <?php
-    $title = "System Support";
+    $title =  config('app.name')." | Create Ticket";
 ?>
 
 @extends('iprotek_core::layouts.app')
@@ -18,10 +18,10 @@
 
 
 @section('content')
-    <div class="container pt-2" id="helpdesk-container"> 
-        <helpdesk :data="{{$data}}"></helpdesk>
-    </div>
-    <script src="/iprotek/js/helpdesk/response.js?v=1.0.0.0"></script>
+    <div class="container pt-2" id="create-ticket-container">  
+        <create-ticket></create-ticket>
+    </div> 
+    <script src="/iprotek/js/helpdesk/create-customer-ticket.js?v=1.0.0.0"></script>
 @endsection
 
 @section('foot')

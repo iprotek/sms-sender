@@ -266,5 +266,23 @@ class SmsTicketController extends _CommonController
     }
 
 
+    public function create_get(Request $request){
+        return view( 'iprotek_sms_sender::customer-create'  );
+    }
+
+    public function create_post(Request $request){
+
+        $this->validate($request, [
+            "title"=>"required|min:10",
+            "message"=>"required|min:10",
+            "customer_account_no"=>"required",
+            "customer_name"=>"required|min:10",
+            "customer_email"=>"required|email",
+            "customer_contact_no"=>"required|min:11"
+        ]);
+        return "ABC";
+    }
+
+
 
 }
