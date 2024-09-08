@@ -104,7 +104,7 @@ class SmsTicketController extends _CommonController
         ]);
 
         $ticket->response_url =  URL::temporarySignedRoute(
-            'helpdesk.ticket.response-get', now()->addMinutes(525600), [ 'id'=> $ticket ]
+            'helpdesk.ticket.response-get', now()->addMinutes(525600), [ 'id'=> $ticket->id ]
         );
         $ticket->save();
 
@@ -241,7 +241,10 @@ class SmsTicketController extends _CommonController
             return ["status"=>1, "message"=>"Message Submitted"];
 
         }
-        else if($request->action == 'message' && $id->cater_by_name && $id->ticket_type == 'customer'){
+        else if($request->action == 'message'  && $id->ticket_type == 'customer'){
+            $this->validate($request, [
+                "message"=>"required|min:10"
+            ]);
             
             $chat_by_email = $id->customer_email;
             $chat_by_name = $id->customer_name;
@@ -272,15 +275,40 @@ class SmsTicketController extends _CommonController
 
     public function create_post(Request $request){
 
+        
         $this->validate($request, [
-            "title"=>"required|min:10",
-            "message"=>"required|min:10",
+            "title"=>"required|min:10|max:50",
+            "message"=>"required|min:10|max:1000",
             "customer_account_no"=>"required",
-            "customer_name"=>"required|min:10",
-            "customer_email"=>"required|email",
-            "customer_contact_no"=>"required|min:11"
+            "customer_name"=>"required|min:10|max:50",
+            "customer_email"=>"required|email|max:50",
+            "customer_contact_no"=>"required|min:7|max:50"
         ]);
-        return "ABC";
+        $customer_account_no = $request->customer_account_no;
+        $customer_name = $request->customer_name;
+        $customer_email = $request->customer_email;
+        $customer_contact_no = $request->customer_contact_no;
+
+
+        $ticket =  SmsTicket::create([
+            "title"=>$request->title,
+            "details"=>$request->message,
+            "created_by"=>"0",
+            "app_url"=>config('app.url'),
+            "app_name"=>config('app.name'),
+            "ticket_type"=>'customer',
+            "category_name"=>"",
+            "customer_account_no"=>$customer_account_no,
+            "customer_name"=>$customer_name,
+            "customer_email"=>$customer_email,
+            "customer_contact_no"=>$customer_contact_no
+        ]);
+        $ticket->response_url =  URL::temporarySignedRoute(
+            'helpdesk.ticket.response-get', now()->addMinutes(525600), [ 'id'=> $ticket ]
+        );
+        $ticket->save();
+
+        return ["status"=>1, "message"=>"Ticket Submitted. Please take note of your ticket.", "data"=>[ "id"=>$ticket->id]];
     }
 
 
