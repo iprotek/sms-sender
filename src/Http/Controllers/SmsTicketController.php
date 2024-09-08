@@ -15,6 +15,11 @@ class SmsTicketController extends _CommonController
     public function list(Request $request){
         $tickets = SmsTicket::on();
 
+        if($request->search_text){
+            $search_text = '%'.str_replace(' ', '%', $request->search_text).'%';
+            $tickets->whereRaw(" CONCAT(title, IFNULL(customer_name,''), IFNULL(customer_email,''), IFNULL(customer_account_no,''), IFNULL(customer_contact_no,'') ) LIKE ?", [$search_text] );
+        }
+
         $tickets->orderBy('current_status_id', 'ASC')->orderBy('cater_by_id', 'ASC')->orderBy('updated_at', 'DESC');
         $tickets->with(
             [
@@ -32,12 +37,12 @@ class SmsTicketController extends _CommonController
     }
 
     public function get_info(Request $request, SmsTicket $id){
-        return SmsTicket::with(
-            [
-                'creator'=>function($q){
-                $q->select('id', 'name', 'contact_no', 'email');
-                },
-                'status'])->find($id->id); 
+        return SmsTicket::with([
+            'creator'=>function($q){
+            $q->select('id', 'name', 'contact_no', 'email');
+            },
+            'status'
+        ])->find($id->id); 
     }
 
     public function add(Request $request){
