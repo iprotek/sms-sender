@@ -3,6 +3,7 @@
 namespace iProtek\SmsSender\Http\Controllers;
 
 use Illuminate\Http\Request;
+use iProtek\SmsSender\Models\SmsTicketMessage;
 use iProtek\SmsSender\Models\SmsTicket;
 use iProtek\SmsSender\Models\SmsTicketStatus;
 use iProtek\Core\Http\Controllers\_Common\_CommonController;
@@ -17,7 +18,7 @@ class SmsTicketController extends _CommonController
 
         if($request->search_text){
             $search_text = '%'.str_replace(' ', '%', $request->search_text).'%';
-            $tickets->whereRaw(" CONCAT(title, IFNULL(customer_name,''), IFNULL(customer_email,''), IFNULL(customer_account_no,''), IFNULL(customer_contact_no,'') ) LIKE ?", [$search_text] );
+            $tickets->whereRaw(" CONCAT(id, title, IFNULL(customer_name,''), IFNULL(customer_email,''), IFNULL(customer_account_no,''), IFNULL(customer_contact_no,'') ) LIKE ?", [$search_text] );
         }
 
         $tickets->orderBy('current_status_id', 'ASC')->orderBy('cater_by_id', 'ASC')->orderBy('updated_at', 'DESC');
@@ -189,7 +190,7 @@ class SmsTicketController extends _CommonController
 
     public function response_view(Request $request, SmsTicket $id ){
 
-        $data = SmsTicket::with(['status'])->find($id->id);
+        $data = SmsTicket::with(['status','chats'])->find($id->id);
 
         return view( 'iprotek_sms_sender::system-support',["data"=>$data] );
         //return "123";
@@ -199,15 +200,68 @@ class SmsTicketController extends _CommonController
         $data = SmsTicket::with(['status'])->find($id->id);
 
         //action - cater
-        if($request->action == 'cater'){
+        if($request->action == 'cater' && $id->ticket_type == 'system-support'){
+            $this->validate($request, [
+                "account_no"=>"required|integer",
+                "name"=>"required|min:5"
+            ]);
+            if($id->cater_by_id){
+                return ["status"=>0, "message"=>"Already been catered."];
+            }
+            $id->cater_by_id = $request->account_no;
+            $id->cater_by_name = $request->name;
+            $id->cater_at = \Carbon\Carbon::now();
+            $id->save();
+
+
             return ["status"=>1, "message"=>"You had successfully Catered"];
+        }
+        else if($request->action == 'message' && $id->cater_by_name && $id->ticket_type == 'system-support'){
+            $this->validate($request, [
+                "message"=>"required|min:10"
+            ]);
+
+            //CHECK EMAIL
+            $support_email = config('iprotek_sms_sender.support_email');
+            if(!$support_email  ){
+                return ["status"=>0, "message"=>"System support disallowed."];
+            }
+            $chat_by_email = $support_email;
+            $chat_by_name = $id->cater_by_name;
+            $chat_by_id = $id->cater_by_id;
+            SmsTicketMessage::create([
+                "sms_ticket_id"=>$id->id,
+                "message"=>$request->message,
+                "chat_by"=>$chat_by_id,
+                "chat_by_email"=>$chat_by_email,
+                "chat_by_name"=>$chat_by_name,
+                "is_end_user"=>1
+            ]);
+            
+            return ["status"=>1, "message"=>"Message Submitted"];
+
+        }
+        else if($request->action == 'message' && $id->cater_by_name && $id->ticket_type == 'customer'){
+            
+            $chat_by_email = $id->customer_email;
+            $chat_by_name = $id->customer_name;
+            $chat_by_id = is_numeric( $id->customer_account_no ) ? $id->customer_account_no : "0";
+            SmsTicketMessage::create([
+                "sms_ticket_id"=>$id->id,
+                "message"=>$request->message,
+                "chat_by"=>$chat_by_id ?: "0",
+                "chat_by_email"=>$chat_by_email,
+                "chat_by_name"=>$chat_by_name,
+                "is_end_user"=>1
+            ]);
+            return ["status"=>1, "message"=>"Message Submitted"];
         }
 
 
         //action - chat
 
 
-        return ["status"=>0, "message"=>""];
+        return ["status"=>0, "message"=>"Action unavailable."];
         //return view( 'iprotek_sms_sender::system-support' , ["data"=>$data]);;
     }
 

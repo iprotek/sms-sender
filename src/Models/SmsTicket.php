@@ -65,6 +65,10 @@ class SmsTicket extends _CommonModel
         return $this->hasOne(\iProtek\SmsSender\Models\SmsTicketMessage::class, 'sms_ticket_id')->orderBy('id', 'DESC');
     }
 
+    public function chats(){
+        return $this->hasMany(\iProtek\SmsSender\Models\SmsTicketMessage::class, 'sms_ticket_id')->orderBy('id', 'DESC')->limit(20);
+    }
+
 
 
 }

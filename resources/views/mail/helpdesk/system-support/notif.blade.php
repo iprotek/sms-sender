@@ -36,7 +36,10 @@
             </tr>
             <tr>
                 <th class="text-right">RESPONSE LINK:</th>
-                <td>{{ $ticket->response_url }}</td>
+                <td>
+                    <div style="color:red; font-weight:bold;">-Please dont share this link-</div>
+                    {{ $ticket->response_url }}
+                </td>
             </tr>
             @if($status)
                 <tr>

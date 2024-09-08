@@ -23,6 +23,7 @@ class CreateSmsTicketMessagesTable extends Migration
             $table->integer('chat_by')->default(0); //IF 0, mean support / customer
             $table->string('chat_by_email')->nullable(); 
             $table->string('chat_by_name'); // name of support / customer
+            $table->boolean('is_end_user')->default(0);
 
         });
     }

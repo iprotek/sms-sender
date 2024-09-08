@@ -3,6 +3,7 @@
 ?>
 
 @extends('iprotek_core::layouts.app')
+@section('nav_bar_color', 'navbar-dark shadow-sm')
 @section('head')
     @if($title)
       <title> 

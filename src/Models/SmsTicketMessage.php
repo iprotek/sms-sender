@@ -14,6 +14,7 @@ class SmsTicketMessage extends _CommonModel
         "message",
         "chat_by",
         "chat_by_email",
-        "chat_by_name"
+        "chat_by_name",
+        "is_end_user"
     ];
 }
