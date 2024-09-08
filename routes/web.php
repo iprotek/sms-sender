@@ -27,7 +27,7 @@ Route::middleware(['web'])->group(function(){
     Route::prefix('helpdesk')->name('helpdesk')->group(function(){
         
         //REQUIRES SIGNATURE
-        Route::middleware(['signed'])->prefix('ticket')->name('.ticket')->group(function(){
+        Route::middleware(['signed','throttle:20,1'])->prefix('ticket')->name('.ticket')->group(function(){
             Route::get('response/{id}', [SmsTicketController::class, 'response_view'])->name('.response-get');
             Route::post('response/{id}', [SmsTicketController::class, 'response_post'])->name('.response-post');
         });
