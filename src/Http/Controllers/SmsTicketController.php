@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use iProtek\SmsSender\Models\SmsTicket;
 use iProtek\SmsSender\Models\SmsTicketStatus;
 use iProtek\Core\Http\Controllers\_Common\_CommonController;
+use Illuminate\Support\Facades\URL;
 
 class SmsTicketController extends _CommonController
 {
@@ -95,6 +96,11 @@ class SmsTicketController extends _CommonController
             "customer_email"=>$customer_email,
             "customer_contact_no"=>$customer_contact_no
         ]);
+
+        $ticket->response_url =  URL::temporarySignedRoute(
+            'helpdesk.ticket.response-get', now()->addMinutes(525600), [ 'id'=> $ticket ]
+        );
+        $ticket->save();
 
         if($request->ticket_type == 'system-support'){ 
             //SEND TO SYSTEM SUPPORT EMAIL

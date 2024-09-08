@@ -38,7 +38,7 @@
                 <th class="text-right">RESPONSE LINK:</th>
                 <td>{{ $ticket->response_url }}</td>
             </tr>
-            @if(status)
+            @if($status)
                 <tr>
                     <th class="text-right">STATUS</th>
                     <td> {{ $status->status_name }} </td>
@@ -61,7 +61,7 @@
             @if($latest_message)
                 <tr>
                     <th>LATEST CHAT</th>
-                    <td></td>
+                    <td>{{ $latest_message->message }}</td>
                 </tr>
             @endif
         </table>

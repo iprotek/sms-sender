@@ -32,17 +32,17 @@ class SystemSupportMailable extends Mailable
             return substr('0000000'.$str, -7);
         };
 
-        $this->subject= 'Helpdesk:'.$lastNumberSeven($ticket->id).'|'.config('app.name')." | ".$ticket->title;  
+        $this->subject= 'Helpdesk:'.$lastNumberSeven($ticket->id).' | '.config('app.name')." | ".$ticket->title;  
 
         $newTicket = SmsTicket::with(['status','latest_chat'])->find($ticket->id);
 
         $this->ticket = $newTicket;
 
         //Get Status
-        $this->status = $newTicket->status;
+        $this->status = isset($newTicket->status) ? $newTicket->status : null;
 
         //Get latest chat
-        $this->latest_message = $newTicket->latest_chat;
+        $this->latest_message = isset($newTicket->latest_chat) ? $newTicket->latest_chat : null;
 
     }
 

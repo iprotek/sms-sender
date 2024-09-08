@@ -23,13 +23,13 @@ Route::middleware(['web'])->group(function(){
         });
 
     });
-    Route::get('helpdesk/ticket/response/{id}', [SmsTicketController::class, 'response_view'])->name('.helpdesk');
+    
     Route::prefix('helpdesk')->name('helpdesk')->group(function(){
         
         //REQUIRES SIGNATURE
         Route::middleware(['signed'])->prefix('ticket')->name('.ticket')->group(function(){
-            Route::get('response/{id}', [SmsTicketController::class, 'response_view'])->name('.response');
-            Route::post('response/{id}', [SmsTicketController::class, 'response_post'])->name('.response');
+            Route::get('response/{id}', [SmsTicketController::class, 'response_view'])->name('.response-get');
+            Route::post('response/{id}', [SmsTicketController::class, 'response_post'])->name('.response-post');
         });
 
     });
