@@ -98,6 +98,7 @@ class SmsTicketController extends _CommonController
 
         if($request->ticket_type == 'system-support'){ 
             //SEND TO SYSTEM SUPPORT EMAIL
+            \iProtek\SmsSender\Helpers\MailHelper::send($support_email, new \iProtek\SmsSender\Mailables\SystemSupportMailable($ticket));
 
         }
 

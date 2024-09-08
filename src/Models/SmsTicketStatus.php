@@ -5,7 +5,7 @@ namespace iProtek\SmsSender\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SmsTicketStatus extends Model
+class SmsTicketStatus extends _CommonModel
 {
     use HasFactory;
 

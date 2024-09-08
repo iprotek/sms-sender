@@ -5,7 +5,7 @@ namespace iProtek\SmsSender\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class SmsTicket extends Model
+class SmsTicket extends _CommonModel
 {
     use HasFactory;
 
@@ -59,6 +59,10 @@ class SmsTicket extends Model
 
     public function status(){
         return $this->hasOne(\iProtek\SmsSender\Models\SmsTicketStatus::class, 'sms_ticket_id')->orderBy('id', 'DESC');
+    }
+
+    public function latest_chat(){
+        return $this->hasOne(\iProtek\SmsSender\Models\SmsTicketMessage::class, 'sms_ticket_id')->orderBy('id', 'DESC');
     }
 
 
