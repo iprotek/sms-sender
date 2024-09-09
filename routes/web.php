@@ -3,6 +3,7 @@
 use Illuminate\Support\Facades\Route; 
 use iProtek\SmsSender\Http\Controllers\SmsController;
 use iProtek\SmsSender\Http\Controllers\SmsTicketController;
+use iProtek\SmsSender\Http\Controllers\SmsTicketMessageController;
 
 Route::middleware(['web'])->group(function(){
  
@@ -21,6 +22,10 @@ Route::middleware(['web'])->group(function(){
                 Route::delete('delete/{id}', [SmsTicketController::class, 'remove'])->name('.delete'); 
                 Route::post('cater/{id}', [SmsTicketController::class, 'cater_ticket'])->name('.cater'); 
                 Route::post('update-status/{id}', [SmsTicketController::class, 'update_status'])->name('.update-status'); 
+
+                Route::get('/{id}/messages', [SmsTicketMessageController::class, 'ticket_message'] )->name('.messages');
+                Route::post('/{id}/message-add', [SmsTicketMessageController::class, 'add'] )->name('.message-add');
+
             });
             
         });
