@@ -17,9 +17,11 @@
   <?php
       $user_id = auth()->user()->id;
       $pay_account = \iProtek\Core\Models\UserAdminPayAccount::where('user_admin_id', $user_id)->first();
-      if(!$pay_account)
-        die();
-      $group_id = $pay_account->default_proxy_group_id;
+      $group_id = 0;
+      if($pay_account)
+      {
+        $group_id = $pay_account->default_proxy_group_id;
+      }
     ?>
      <helpdesk-table group_id="{{$group_id}}"></helpdesk-table> 
      
