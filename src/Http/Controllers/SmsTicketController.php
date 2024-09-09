@@ -311,6 +311,9 @@ class SmsTicketController extends _CommonController
         return ["status"=>1, "message"=>"Ticket Submitted. Please take note of your ticket.", "data"=>[ "id"=>$ticket->id]];
     }
 
+    public function helpdesk(Request $request){
 
+        return $this->view( 'iprotek_sms_sender::manage.helpdesk' );
+    }
 
 }
