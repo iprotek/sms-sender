@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use iProtek\SmsSender\Http\Controllers\SmsController;
 use iProtek\SmsSender\Http\Controllers\SmsTicketController;
 use iProtek\SmsSender\Http\Controllers\SmsTicketMessageController;
+use iProtek\SmsSender\Http\Controllers\MessageController;
 
 include(__DIR__.'/api.php');
 
@@ -12,9 +13,9 @@ Route::middleware(['web'])->group(function(){
     Route::middleware(['auth'])->prefix('manage')->name('manage')->group(function(){
         
         Route::prefix('sms-sender')->name('.sms-sender')->group(function(){
-            //MESSAGE CHAT NOTIFICATIONS
-            Route::get('/push-notif-info', [SmsController::class, 'push_notif_info'])->name('.push-notif-info'); 
 
+            //MESSAGE CHAT NOTIFICATIONS
+            
             //TICKETS
             Route::prefix('ticket')->name('.ticket')->group(function(){
                 Route::get('list', [SmsTicketController::class, 'list'])->name('.push-notif-info'); 
@@ -29,7 +30,13 @@ Route::middleware(['web'])->group(function(){
                 Route::post('/{id}/message-add', [SmsTicketMessageController::class, 'add'] )->name('.message-add');
 
             });
+
             
+        });
+        //Route Message
+        Route::prefix('message')->name('.message')->group(function(){
+            Route::get('users', [MessageController::class, 'users'])->name('.users');
+            Route::get('/push-notif-info', [MessageController::class, 'push_notif_info'])->name('.push-notif-info'); 
         });
 
         //HELPDESK

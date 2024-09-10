@@ -20,7 +20,7 @@ Route::prefix('api/message')->middleware('api')->group(function(){
         //include(__DIR__.'/api/meta-data.php');
 
     });
-    Route::get('/users', [MessageController::class, 'users']);
+    //Route::get('/users', [MessageController::class, 'users']);
 
 
          
