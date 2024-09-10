@@ -31,10 +31,18 @@ class SmsTicketController extends _CommonController
             ]);
         if($request->action == 'notification'){
             $tickets->where('current_status_id', 0);
+            $results = $tickets->paginate(10);
+            //$results['manual_url'] = "GG";
+            return [
+                "pageData"=>$results,
+                "manual_url"=>config('iprotek_sms_sender.manual_url','#')
+            ];
         }
-
-
-        return $tickets->paginate(10);
+        else{
+            $results = $tickets->paginate(10);//config('iprotek_sms_sender.manual_url','#');
+        }
+        
+        return $results;
     }
 
     public function get_info(Request $request, SmsTicket $id){
