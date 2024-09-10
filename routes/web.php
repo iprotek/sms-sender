@@ -36,7 +36,8 @@ Route::middleware(['web'])->group(function(){
         //Route Message
         Route::prefix('message')->name('.message')->group(function(){
             Route::get('users', [MessageController::class, 'users'])->name('.users');
-            Route::get('/push-notif-info', [MessageController::class, 'push_notif_info'])->name('.push-notif-info'); 
+            Route::get('/push-notif-info', [MessageController::class, 'push_notif_info'])->name('.push-notif-info');
+            Route::get('/notifications', [MessageController::class, 'notifications'])->name('.notifications'); 
         });
 
         //HELPDESK
