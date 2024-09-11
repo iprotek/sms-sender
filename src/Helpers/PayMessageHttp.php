@@ -39,18 +39,38 @@ class PayMessageHttp
     }
 
     //CLIENT
-    public static function client(){
+    public static function client($token=null){
         //Preparation of Headers
         $pay_message = config('iprotek_sms_sender.pay_message_url');
         $pay_url = config('iprotek.pay_url');
         $client_id = config('iprotek.pay_client_id');
         $client_secret = config('iprotek.pay_client_secret'); 
  
+
+        $proxy_id = 0;
+        $pay_app_user_account_id = 0;
+        
+        if(auth()->check()){
+            $user = auth()->user();
+            $pay_account = \iProtek\Core\Models\UserAdminPayAccount::where('user_admin_id', $user->id)->first();
+            if( $pay_account ){ 
+                $proxy_id = $pay_account->own_proxy_group_id;
+                $pay_app_user_account_id = $pay_account->pay_app_user_account_id;
+                $token = $token ?: $pay_account->access_token;
+            }
+        }
+
+
         $headers = [
             "Accept"=>"application/json",
             "CLIENT-ID"=>$client_id,
             "SECRET"=>$client_secret,
             "PAY-URL"=>$pay_url,
+            "SOURCE-URL"=>config('app.url'),
+            "SOURCE-NAME"=>config('app.name'),
+            "PAY-USER-ACCOUNT-ID"=>$pay_app_user_account_id."",
+            "PAY-PROXY-ID"=>$proxy_id,
+            "Authorization"=>"Bearer ".($token?:"")
         ];
         
         $client = new \GuzzleHttp\Client([
