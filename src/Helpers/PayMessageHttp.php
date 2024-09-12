@@ -63,6 +63,7 @@ class PayMessageHttp
 
         $headers = [
             "Accept"=>"application/json",
+            'Content-Type' => 'application/json',
             "CLIENT-ID"=>$client_id,
             "SECRET"=>$client_secret,
             "PAY-URL"=>$pay_url,
@@ -147,6 +148,31 @@ class PayMessageHttp
             "message"=>"Api Successful."
         ];
 
+    }
+
+    public static function post_client($url, $body, $raw_response = false, $error_default = null){
+
+        if(is_array($body)){
+            $body = json_encode($body);
+        }
+        else if(is_object($body)){
+            $body = json_encode($body);
+        }
+
+
+        //PRECHECKING
+        $pay_message_url = config('iprotek_sms_sender.pay_message_url');
+        if(!$pay_message_url){
+            return [
+                "status"=>0,
+                "message"=>"Messaging not set"
+            ];
+        }
+        
+        $client = static::client();
+        
+        $response = $client->post($url, ["body"=>$body]);
+        return static::response_result($response, $raw_response, $error_default);
     }
  
 
