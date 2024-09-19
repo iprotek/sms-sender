@@ -19,7 +19,7 @@ class SmsController extends Controller
         if($client_info){
 
             if(is_array($client_info)){
-                return $client_info['socket_settings'];
+                //return $client_info['socket_settings'];
                 
                 $socket_settings = $client_info['socket_settings'];
 
