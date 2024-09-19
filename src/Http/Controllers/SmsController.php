@@ -11,4 +11,25 @@ class SmsController extends Controller
     {
         return view('sms-sender::index');
     }
+
+    public function push_info(Request $request){
+        
+        //GETTING SOCKET PUSH INFO
+        $client_info = \iProtek\Core\Helpers\PayHttp::client_info();
+        if($client_info){
+
+            if(is_array($client_info)){
+                return $client_info['socket_settings'];
+            }
+            return $client_info->socket_settings;
+        }
+        return [
+            "is_active"=>false,
+            "name"=>"",
+            "key"=>"",
+            "cluster"=>"",
+            "message"=>"Not Found."
+        ];
+    }
+    
 }

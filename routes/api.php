@@ -28,3 +28,4 @@ Route::prefix('api/message')->middleware('api')->group(function(){
 
          
 });
+Route::get('api/push-info', [\iProtek\SmsSender\Http\Controllers\SmsController::class, 'push_info'])->name('api.push-info');
