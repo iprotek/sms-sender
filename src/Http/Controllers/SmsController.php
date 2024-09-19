@@ -20,8 +20,27 @@ class SmsController extends Controller
 
             if(is_array($client_info)){
                 return $client_info['socket_settings'];
+                
+                $socket_settings = $client_info['socket_settings'];
+
+                if($socket_settings){
+                    return [
+                        "is_active"=>$socket_settings->is_active,
+                        "name"=>$socket_settings->socket_name,
+                        "key"=>$socket_settings->key,
+                        "cluster"=>$socket_settings->cluster
+                    ];
+                }
             }
-            return $client_info->socket_settings;
+            $socket_settings =  $client_info->socket_settings;
+            if($socket_settings){
+                return [
+                    "is_active"=>$socket_settings->is_active,
+                    "name"=>$socket_settings->socket_name,
+                    "key"=>$socket_settings->key,
+                    "cluster"=>$socket_settings->cluster
+                ];
+            }
         }
         return [
             "is_active"=>false,
@@ -31,5 +50,5 @@ class SmsController extends Controller
             "message"=>"Not Found."
         ];
     }
-    
+
 }
