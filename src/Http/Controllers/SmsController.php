@@ -25,10 +25,10 @@ class SmsController extends Controller
 
                 if($socket_settings){
                     return [
-                        "is_active"=>$socket_settings['is_active'],
-                        "name"=>$socket_settings['socket_name'],
-                        "key"=>$socket_settings['key'],
-                        "cluster"=>$socket_settings['cluster']
+                        "is_active"=> isset($socket_settings['is_active']) ? $socket_settings['is_active']: false,
+                        "name"=>isset($socket_settings['socket_name']) ? $socket_settings['socket_name'] :"",
+                        "key"=>isset($socket_settings['key']) ? $socket_settings['key']:"",
+                        "cluster"=>isset($socket_settings['cluster']) ? $socket_settings['cluster'] :""
                     ];
                 }
             }
