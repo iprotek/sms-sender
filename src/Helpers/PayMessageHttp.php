@@ -94,7 +94,7 @@ class PayMessageHttp
     public static function get_client( $url, $raw_response = false, $error_default = null){
 
         //PRECHECKING
-        //$pay_message_url = config('iprotek_sms_sender.pay_message_url');
+        $pay_message_url = config('iprotek_sms_sender.pay_message_url');
         if(!$pay_message_url){
             return [
                 "status"=>0,
