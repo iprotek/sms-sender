@@ -15,6 +15,18 @@ class MessageController extends Controller
 
     public function push_notif_info(Request $request){
 
+        $pay_message_url = config('iprotek_sms_sender.pay_message_url');
+        if(!$pay_message_url){
+            return [
+                "status"=>0,
+                "message"=>"Messaging not set"
+            ];
+        }
+        
+        $client = \iProtek\SmsSender\Helpers\PayMessageHttp::client();
+        
+        $response = $client->get('api/push-info');
+        return $response;
         $result = \iProtek\SmsSender\Helpers\PayMessageHttp::get_client('/api/push-info');/*, true, [
                 "is_active"=>false,
                 "name"=>"",
