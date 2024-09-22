@@ -5,6 +5,7 @@ use iProtek\SmsSender\Http\Controllers\SmsController;
 use iProtek\SmsSender\Http\Controllers\SmsTicketController;
 use iProtek\SmsSender\Http\Controllers\SmsTicketMessageController;
 use iProtek\SmsSender\Http\Controllers\MessageController;
+use iProtek\SmsSender\Http\Controllers\SmsClientApiRequestLinkController;
 
 include(__DIR__.'/api.php');
 
@@ -31,7 +32,12 @@ Route::middleware(['web'])->group(function(){
 
             });
 
-            
+            //SMS-SENDER
+            Route::get('/',[SmsClientApiRequestLinkController::class, 'index']);
+            Route::get('list', [SmsClientApiRequestLinkController::class, 'list'] )->name('.list');
+
+
+
         });
 
         //Route Message
