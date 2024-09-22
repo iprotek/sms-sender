@@ -13,6 +13,13 @@ class PaySmsHelper
 {
     public static function checkApi($api_url, $api_name, $api_username, $api_pass){
 
+
+        //Validate API IF ACTIVE
+            //PERFORM HTTP REQUEST WITH HEADERS
+                //HEADERS:
+                    //NAME
+                    //USERNAME
+                    //PASSWORD
         return ["status"=>1, "message"=>"Successful"];
     }
 
@@ -21,89 +28,88 @@ class PaySmsHelper
         if($smsClient == null){
             $smsClient = SmsClientApiRequestLink::where('is_active', 1)->orderBy('priority','ASC')->first();
         }
-
+         
+        $smsMessage = SmsClientMessage::create([
+            "to_number"=>$to_number,
+            "message"=>$message,
+            "sms_client_api_request_link_id"=>($smsClient ? $smsClient->id : null)
+        ]); 
 
 
         if($smsClient == null){
 
-            return ["status"=>0, "message"=>""];
+            return ["status"=>0, "message"=>"No sms api client available"];
 
         }
-
-
-
-    }
-
-
-
-
-
-
-    public static function auth_client($token){
-        $pay_url = config('iprotek.pay_url');
-        $pay_message = config('iprotek_sms_sender.pay_message_url');
-        $client_id = config('iprotek.pay_client_id');
-        $client_secret = config('iprotek.pay_client_secret'); 
-        
-        $headers = [
-            "Accept"=>"application/json",
-            "CLIENT-ID"=>$client_id,
-            "SECRET"=>$client_secret,
-            "PAY-URL"=>$pay_url,
-            "Authorization"=>"Bearer ",$token
-        ];
-        
-        $client = new \GuzzleHttp\Client([
-            'base_uri' => $pay_message,
-            "http_errors"=>false, 
-            "verify"=>false, 
-            "curl"=>[
-                CURLOPT_HTTP_VERSION => CURL_HTTP_VERSION_2_0, // Specify HTTP/2
-            ],
-            "headers"=>$headers
-         ]);
-        return $client;
-
-    }
-
-    //CLIENT
-    public static function client($token=null){
-        //Preparation of Headers
-        $pay_message = config('iprotek_sms_sender.pay_message_url');
-        $pay_url = config('iprotek.pay_url');
-        $client_id = config('iprotek.pay_client_id');
-        $client_secret = config('iprotek.pay_client_secret'); 
  
+        //PERFORM HTTP REQUEST WITH HEADERS
+            //HEADERS:
+                //NAME
+                //USERNAME
+                //PASSWORD
 
-        $proxy_id = 0;
-        $pay_app_user_account_id = 0;
+        $header_name = $smsClient->api_name;
+        $header_username = $smsClient->api_username;
+        $header_password = $smsClient->api_password;
+        $url = $smsClient->api_url;
+
+        $body = [
+            "action"=>"add-sms",
+            "to_number"=>$to_number,
+            "message"=>$message
+        ];
+
+        $client = static::client($url, $header_name, $header_username, $header_password);
         
-        if(auth()->check()){
-            $user = auth()->user();
-            $pay_account = \iProtek\Core\Models\UserAdminPayAccount::where('user_admin_id', $user->id)->first();
-            if( $pay_account ){ 
-                $proxy_id = $pay_account->own_proxy_group_id;
-                $pay_app_user_account_id = $pay_account->pay_app_user_account_id;
-                $token = $token ?: $pay_account->access_token;
+        $response = $client->post('', ["body"=>$body]);
+        $result = static::response_result($response, null, null);
+        if($result['status'] == 0){
+            $smsMessage->status_id = 2;
+            $smsMessage->status_info = "Failed: ".$result['message'];
+            $smsMessage->save();
+            return ["status"=>0, "message"=>"Failed"];
+        }
+        else if($result['status'] == 1){
+            if($result['result']['status'] == 0){
+                $smsMessage->status_id = 2;
+                $smsMessage->status_info = "Failed: ".$result['result']['message'];
+                $smsMessage->save();
+                return ["status"=>0, "message"=>"Failed"];
             }
         }
 
+        $result_data = $result['result'];
+
+        $smsMessage->data_id = $result_data['data_id'];
+        $smsMessage->sender_id = $result_data['sender_id'];
+        $smsMessage->sms_api_request_link_id = $result_data['api_request_link_id'];
+        $smsMessage->save();
+
+
+        return ["status"=>0, "message"=>"", "data"=>$smsMessage, "sender"=>$result_data['sender_mobile_no']];
+    }
+
+ 
+    //CLIENT
+    public static function client($url, $name, $username, $password){ 
+
+ 
+    //PERFORM HTTP REQUEST WITH HEADERS
+        //HEADERS:
+            //NAME
+            //USERNAME
+            //PASSWORD
 
         $headers = [
             "Accept"=>"application/json",
             'Content-Type' => 'application/json',
-            "CLIENT-ID"=>$client_id,
-            "SECRET"=>$client_secret,
-            "PAY-URL"=>$pay_url,
-            "SOURCE-URL"=>config('app.url'),
-            "SOURCE-NAME"=>config('app.name'),
-            "PAY-USER-ACCOUNT-ID"=>$pay_app_user_account_id."",
-            "PAY-PROXY-ID"=>$proxy_id,
-            "Authorization"=>"Bearer ".($token?:"")
+            "NAME" => $name,
+            "USERNAME" => $username,
+            "PASSWORD" => $password
         ];
         
         $client = new \GuzzleHttp\Client([
-            'base_uri' => $pay_message,
+            'base_uri' => $url,
             "http_errors"=>false, 
             "verify"=>false, 
             "curl"=>[
@@ -113,28 +119,7 @@ class PaySmsHelper
          ]);
         return $client;
 
-    }
-    /**
-     * $url - required
-     * $raw_response - true actual response / false modified formatted response
-     * $error_default - if the result is not OK then it will return the error_default value
-     */
-    public static function get_client( $url, $raw_response = false, $error_default = null){
-
-        //PRECHECKING
-        $pay_message_url = config('iprotek_sms_sender.pay_message_url');
-        if(!$pay_message_url){
-            return [
-                "status"=>0,
-                "message"=>"Messaging not set"
-            ];
-        }
-        
-        $client = static::client();
-        
-        $response = $client->get($url);
-        return static::response_result($response, $raw_response, $error_default);
-    }
+    } 
 
     public static function response_result( $response, $raw_response, $error_default){
         $response_code = $response->getStatusCode(); 

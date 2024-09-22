@@ -51,6 +51,12 @@ class SmsClientApiRequestLinkController extends _CommonController
                     //USERNAME
                     //PASSWORD
         
+        /*
+        
+            $api_url = URL::signedRoute(
+                'api.products', [ 'id'=> $market_link->id ]
+            );
+        */
 
 
 
