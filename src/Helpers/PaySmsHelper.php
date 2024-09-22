@@ -6,10 +6,38 @@ use DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 //use iProtek\Core\Models\UserAdminPayAccount;
+use iProtek\SmsSender\Models\SmsClientApiRequestLink;
+use iProtek\SmsSender\Models\SmsClientMessage;
 
 class PaySmsHelper
 {
-    //AUTH 
+    public static function checkApi($api_url, $api_name, $api_username, $api_pass){
+
+        return ["status"=>1, "message"=>"Successful"];
+    }
+
+    public static function send($to_number, $message, SmsClientApiRequestLink $smsClient=null){
+        //action: add-sms
+        if($smsClient == null){
+            $smsClient = SmsClientApiRequestLink::where('is_active', 1)->orderBy('priority','ASC')->first();
+        }
+
+
+
+        if($smsClient == null){
+
+            return ["status"=>0, "message"=>""];
+
+        }
+
+
+
+    }
+
+
+
+
+
 
     public static function auth_client($token){
         $pay_url = config('iprotek.pay_url');

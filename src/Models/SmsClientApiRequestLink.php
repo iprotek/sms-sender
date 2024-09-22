@@ -4,10 +4,11 @@ namespace iProtek\SmsSender\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class SmsClientApiRequestLink extends _CommonModel
 {
-    use HasFactory;
+    use HasFactory, SoftDeletes;
 
     public $fillable = [
         "group_id",

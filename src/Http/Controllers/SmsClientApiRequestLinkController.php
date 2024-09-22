@@ -60,4 +60,16 @@ class SmsClientApiRequestLinkController extends _CommonController
         return ["status"=>1, "message"=>"Successfully Added", "data"=>$data];
     }
 
+    public function api_response(Request $request){
+
+        //ACTION: update-status
+        //UPDATE SENT MESSAGE
+
+
+        //ACTION: add-message
+        //ADD NEW MESSAGE
+
+
+    }
+
 }
