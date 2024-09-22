@@ -17,6 +17,8 @@ class CreateSmsClientMessagesTable extends Migration
             $table->id();
             $table->string('to_number');
             $table->text('message');
+            $table->string('target_id')->nullable();
+            $table->string('target_name')->nullable();
             $table->integer('status_id')->nullable();
             $table->string('status_info')->nullable();
             $table->dateTime('status_at')->nullable();

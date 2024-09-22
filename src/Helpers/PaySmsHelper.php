@@ -37,7 +37,7 @@ class PaySmsHelper
         return ["status"=>1, "message"=>"Successful"];
     }
 
-    public static function send($to_number, $message, SmsClientApiRequestLink $smsClient=null){
+    public static function send($to_number, $message, SmsClientApiRequestLink $smsClient=null, $target_id, $target_name){
         //action: add-sms
         if($smsClient == null){
             $smsClient = SmsClientApiRequestLink::where('is_active', 1)->orderBy('priority','ASC')->first();
@@ -46,6 +46,8 @@ class PaySmsHelper
         $smsMessage = SmsClientMessage::create([
             "to_number"=>$to_number,
             "message"=>$message,
+            "target_id"=>$target_id,
+            "target_name"=>$target_name,
             "sms_client_api_request_link_id"=>($smsClient ? $smsClient->id : null)
         ]); 
 

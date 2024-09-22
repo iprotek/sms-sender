@@ -13,6 +13,8 @@ class SmsClientMessage extends _CommonModel
     public $fillable = [
         "to_number",
         "message",
+        "target_id",
+        "target_name",
         "status_id",
         "status_info",
         "status_at",
