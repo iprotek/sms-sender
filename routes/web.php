@@ -35,6 +35,9 @@ Route::middleware(['web'])->group(function(){
             //SMS-SENDER
             Route::get('/',[SmsClientApiRequestLinkController::class, 'index']);
             Route::get('list', [SmsClientApiRequestLinkController::class, 'list'] )->name('.list');
+            Route::get('list/{sms_api_client_id}', [SmsClientApiRequestLinkController::class, 'list'] )->name('.get-one');
+            Route::post('add-client', [SmsClientApiRequestLinkController::class, 'add_client'] )->name('.add');
+            Route::put('update-client/{sms_api_client_id}', [SmsClientApiRequestLinkController::class, 'update_client'] )->name('.add');
 
 
 

@@ -19,7 +19,8 @@ class SmsClientMessage extends _CommonModel
         "sms_client_api_request_link_id",
         "sms_api_request_link_id",
         "data_id",
-        "sender_id"
+        "sender_id",
+        "sent_at"
     ];
 
 }

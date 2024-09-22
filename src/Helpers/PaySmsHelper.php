@@ -20,6 +20,20 @@ class PaySmsHelper
                     //NAME
                     //USERNAME
                     //PASSWORD
+        $client = static::client($api_url, $api_name, $api_username, $api_pass);
+        
+        $response = $client->get('');
+
+        $result = static::response_result($response, false, null);
+        if($result['status'] == 0){ 
+            return ["status"=>0, "message"=>"Failed"];
+        }
+        else if($result['status'] == 1){
+            if($result['result']['status'] == 0){ 
+                return ["status"=>0, "message"=>"Failed"];
+            }
+        }
+
         return ["status"=>1, "message"=>"Successful"];
     }
 
@@ -38,7 +52,7 @@ class PaySmsHelper
 
         if($smsClient == null){
 
-            return ["status"=>0, "message"=>"No sms api client available"];
+            return ["status"=>0, "message"=>"No sms api active client available."];
 
         }
  
@@ -62,7 +76,7 @@ class PaySmsHelper
         $client = static::client($url, $header_name, $header_username, $header_password);
         
         $response = $client->post('', ["body"=>$body]);
-        $result = static::response_result($response, null, null);
+        $result = static::response_result($response, false, null);
         if($result['status'] == 0){
             $smsMessage->status_id = 2;
             $smsMessage->status_info = "Failed: ".$result['message'];
@@ -84,6 +98,12 @@ class PaySmsHelper
         $smsMessage->sender_id = $result_data['sender_id'];
         $smsMessage->sms_api_request_link_id = $result_data['api_request_link_id'];
         $smsMessage->save();
+
+
+        //SENDING UPDATE
+        $smsClient->last_sending_at = \Carbon\Carbon::now();
+        if($smsClient->isDirty())
+            $smsClient->save();
 
 
         return ["status"=>0, "message"=>"", "data"=>$smsMessage, "sender"=>$result_data['sender_mobile_no']];

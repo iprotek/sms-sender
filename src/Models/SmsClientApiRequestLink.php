@@ -28,4 +28,14 @@ class SmsClientApiRequestLink extends _CommonModel
         "priority",
         "last_sending_at"
     ];
+
+    
+    protected $hidden = [
+        'api_password'
+    ];
+
+    public $casts = [
+        "is_active"=>"boolean",
+        "is_webhook_active"=>"boolean"
+    ];
 }
