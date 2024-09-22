@@ -17,6 +17,8 @@ class CreateSmsClientReceivedMessagesTable extends Migration
             $table->id();
             $table->string('from_number');
             $table->text('message'); 
+            $table->string('target_id')->nullable();
+            $table->string('target_name')->nullable();
             $table->integer('sms_client_api_request_link_id')->nullable();
             $table->integer('sms_api_request_link_id')->nullable();
             $table->integer('sender_id')->nullable();

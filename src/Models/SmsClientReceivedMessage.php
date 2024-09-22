@@ -13,10 +13,12 @@ class SmsClientReceivedMessage extends Model
     public $fillable = [
         "from_number",
         "message",
+        "target_id",
+        "target_name",
         "sms_client_api_request_link_id",
         "sms_api_request_link_id",
         "sender_id",
         "data_id",
-        "received_at"
+        "received_at",
     ];
 }
