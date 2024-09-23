@@ -77,20 +77,20 @@ class PaySmsHelper
 
         $client = static::client($url, $header_name, $header_username, $header_password);
         
-        $response = $client->post('', ["body"=>$body]);
+        $response = $client->post('', ["body"=>json_encode($body)]);
         $result = static::response_result($response, false, null);
         if($result['status'] == 0){
             $smsMessage->status_id = 2;
             $smsMessage->status_info = "Failed: ".$result['message'];
             $smsMessage->save();
-            return ["status"=>0, "message"=>"Failed"];
+            return ["status"=>0, "message"=>"Failed: ".$result['message']];
         }
         else if($result['status'] == 1){
             if($result['result']['status'] == 0){
                 $smsMessage->status_id = 2;
                 $smsMessage->status_info = "Failed: ".$result['result']['message'];
                 $smsMessage->save();
-                return ["status"=>0, "message"=>"Failed"];
+                return ["status"=>0, "message"=>$result['result']['message']];
             }
         }
 
@@ -99,6 +99,11 @@ class PaySmsHelper
         $smsMessage->data_id = $result_data['data_id'];
         $smsMessage->sender_id = $result_data['sender_id'];
         $smsMessage->sms_api_request_link_id = $result_data['api_request_link_id'];
+
+        //SET STATUS
+        $smsMessage->status_id = 0;
+        $smsMessage->status_info = "Pending";
+
         $smsMessage->save();
 
 
@@ -108,7 +113,7 @@ class PaySmsHelper
             $smsClient->save();
 
 
-        return ["status"=>0, "message"=>"", "data"=>$smsMessage, "sender"=>$result_data['sender_mobile_no']];
+        return ["status"=>1, "message"=>"Request successfully sent. expect message from : ".$result_data['sender_mobile_no'] , "data"=>$smsMessage, "sender"=>$result_data['sender_mobile_no']];
     }
 
  
@@ -116,11 +121,11 @@ class PaySmsHelper
     public static function client($url, $name, $username, $password){ 
 
  
-    //PERFORM HTTP REQUEST WITH HEADERS
-        //HEADERS:
-            //NAME
-            //USERNAME
-            //PASSWORD
+        //PERFORM HTTP REQUEST WITH HEADERS
+            //HEADERS:
+                //NAME
+                //USERNAME
+                //PASSWORD
 
         $headers = [
             "Accept"=>"application/json",

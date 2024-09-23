@@ -10,4 +10,10 @@ class SmsClientMessageController extends _CommonController
 {
     //
     public $guard = "admin";
+ 
+    public function list(Request $request){
+        $data = SmsClientMessage::on();
+        $data->orderBy('id', 'DESC');
+        return $data->paginate(10);
+    }
 }

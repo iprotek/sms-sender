@@ -86,6 +86,41 @@ class SmsClientApiRequestLinkController extends _CommonController
         return ["status"=>1, "message"=>"Successfully Added", "data"=>$data];
     }
 
+    public function list_selection(Request $request){
+        $data = SmsClientApiRequestLink::on();
+        if($request->search_text){
+            $search_text = '%'.str_replace(' ','%', $request->search_text).'%';
+            $data->where('name','LIKE', $search_text);
+        }
+        $data->where('is_active', 1);
+        $data->select('id', 'name as text');
+        $data->orderBy('priority', 'ASC');
+        return $data->paginate(10); 
+    }
+
+    public function send_message(Request $request, SmsClientApiRequestLink  $sms_api_client_id){
+        $this->validate($request, [ 
+            "to_number"=>["required", function ($attribute, $value, $fail) {
+                    $to_number = str_replace(' ', '', $value);
+                    if(strlen($to_number)<=10 ){
+                        $fail('CP Number should be greater than 10 digit with or without +');
+                    }
+                }
+            ],
+            "message"=>["required", function ($attribute, $value, $fail) {
+                $message = trim(  $value);
+                if(!$message ){
+                    $fail('Message is Required');
+                }
+            }]
+        ]);
+
+
+
+        $result = \iProtek\SmsSender\Helpers\PaySmsHelper::send($request->to_number, $request->message, $sms_api_client_id);
+        return $result;
+        return ["status"=>1, "message"=>"Request sent successfully"];
+    }
 
     public function update_client(Request $request, SmsClientApiRequestLink $sms_api_client_id){
 
