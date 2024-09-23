@@ -42,6 +42,7 @@ Route::middleware(['web'])->group(function(){
             Route::get('/list-selection', [SmsClientApiRequestLinkController::class, 'list_selection'] )->name('.list-selection');
             Route::post('send-message/{sms_api_client_id}', [SmsClientApiRequestLinkController::class, 'send_message'] )->name('.send-message');
             Route::get('list-messages', [SmsClientMessageController::class, 'list'] )->name('.list-message');
+            Route::delete('delete-message/{id}', [SmsClientMessageController::class, 'delete_message'] )->name('.delete-message');
         });
 
         //Route Message
