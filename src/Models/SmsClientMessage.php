@@ -25,4 +25,9 @@ class SmsClientMessage extends _CommonModel
         "sent_at"
     ];
 
+    public $casts =[
+        "created_at"=>"datetime:Y-m-d h:i:s A",
+        "updated_at"=>"datetime:Y-m-d h:i:s A",
+    ];
+
 }
