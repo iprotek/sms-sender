@@ -99,6 +99,12 @@ class SmsClientApiRequestLinkController extends _CommonController
     }
 
     public function send_message(Request $request, SmsClientApiRequestLink  $sms_api_client_id){
+
+        if(!$sms_api_client_id->is_active){
+            return ["status"=>0, "message"=>"Sms Api Client Inactive"];
+        }
+
+
         $this->validate($request, [ 
             "to_number"=>["required", function ($attribute, $value, $fail) {
                     $to_number = str_replace(' ', '', $value);
