@@ -84,7 +84,7 @@ class PaySmsHelper
             $smsMessage->status_id = 2;
 
             if(!isset($result['message']) && $result['result']){
-                $smsMessage->status_info = "Failed: ".$result['result']['message'];
+                $smsMessage->status_info = "Failed: ". json_decode( $result['result']);//['message'];
             }
             else
                 $smsMessage->status_info = "Failed: ".$result['message'];
