@@ -80,6 +80,7 @@ class PaySmsHelper
         $response = $client->post('', ["body"=>json_encode($body)]);
         $result = static::response_result($response, false, null);
         if($result['status'] == 0){
+            Log::error($result);
             $smsMessage->status_id = 2;
             $smsMessage->status_info = "Failed: ".$result['message'];
             $smsMessage->save();
