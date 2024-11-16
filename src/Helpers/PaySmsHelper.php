@@ -90,7 +90,7 @@ class PaySmsHelper
                 $smsMessage->status_info = "Failed: ".$result['message'];
 
             $smsMessage->save();
-            return ["status"=>0, "message"=>"Failed: ". $smsMessage->status_info];
+            return ["status"=>0, "message"=> $smsMessage->status_info];
         }
         else if($result['status'] == 1){
             if($result['result']['status'] == 0){
