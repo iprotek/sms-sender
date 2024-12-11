@@ -39,7 +39,7 @@ class PayMessageHttp
     }
 
     //CLIENT
-    public static function client($token=null){
+    public static function client($token=null, $is_api = false){
         //Preparation of Headers
         $pay_message = config('iprotek_sms_sender.pay_message_url');
         $pay_url = config('iprotek.pay_url');
@@ -74,8 +74,11 @@ class PayMessageHttp
             "Authorization"=>"Bearer ".($token?:"")
         ];
         
+        $base_url = $is_api ? $pay_message."/api/group/$proxy_id" : $pay_message;
+        //Log::error($base_url);
+
         $client = new \GuzzleHttp\Client([
-            'base_uri' => $pay_message,
+            'base_uri' => $base_url,
             "http_errors"=>false, 
             "verify"=>false, 
             "curl"=>[
@@ -91,7 +94,7 @@ class PayMessageHttp
      * $raw_response - true actual response / false modified formatted response
      * $error_default - if the result is not OK then it will return the error_default value
      */
-    public static function get_client( $url, $raw_response = false, $error_default = null){
+    public static function get_client( $url, $raw_response = false, $error_default = null, $is_api=false){
 
         //PRECHECKING
         $pay_message_url = config('iprotek_sms_sender.pay_message_url');
@@ -102,10 +105,14 @@ class PayMessageHttp
             ];
         }
         
-        $client = static::client();
+        $client = static::client(null, $is_api);
         
         $response = $client->get($url);
         return static::response_result($response, $raw_response, $error_default);
+    }
+
+    public static function get_api_client($url, $raw_response = false, $error_default = null){
+        return static::get_client( $url, $raw_response , $error_default, true);
     }
 
     public static function response_result( $response, $raw_response, $error_default){
@@ -123,11 +130,14 @@ class PayMessageHttp
             if(!$error_default){
                 $result = $response->getBody();
                 if($result){
+                    return response()->json($result, $response_code);
+                    /*
                     return [
                         "status"=>0,
                         "result"=> json_decode($response->getBody(), true),
                         "Api Invalidated."
-                    ]; 
+                    ];
+                    */ 
                 }
                 return [
                     "status"=>0,
@@ -150,7 +160,7 @@ class PayMessageHttp
 
     }
 
-    public static function post_client($url, $body, $raw_response = false, $error_default = null){
+    public static function post_client($url, $body, $raw_response = false, $error_default = null, $is_api = false){
 
         if(is_array($body)){
             $body = json_encode($body);
@@ -169,10 +179,13 @@ class PayMessageHttp
             ];
         }
         
-        $client = static::client();
+        $client = static::client(null, $is_api);
         
         $response = $client->post($url, ["body"=>$body]);
         return static::response_result($response, $raw_response, $error_default);
+    }
+    public static function post_api_client($url, $body, $raw_response = false, $error_default = null){
+        return static::post_client($url, $body, $raw_response, $error_default, true);
     }
  
 

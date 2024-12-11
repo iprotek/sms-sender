@@ -21,6 +21,9 @@ class SmsTicketController extends _CommonController
             $tickets->whereRaw(" CONCAT(id, title, IFNULL(customer_name,''), IFNULL(customer_email,''), IFNULL(customer_account_no,''), IFNULL(customer_contact_no,'') ) LIKE ?", [$search_text] );
         }
 
+        $this->sort_filter($request, $tickets);
+
+
         $tickets->orderBy('current_status_id', 'ASC')->orderBy('cater_by_id', 'ASC')->orderBy('updated_at', 'DESC');
         $tickets->with(
             [
