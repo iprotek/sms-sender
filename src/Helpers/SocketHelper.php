@@ -87,7 +87,7 @@ class SocketHelper
 
             $options = array(
                 'cluster' => $cluster,
-                'useTLS' => true
+                'useTLS' => request()->secure() ? true : false //for http:false or https:true
             );
             
             $pusher = new Pusher(
