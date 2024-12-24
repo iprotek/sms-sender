@@ -6,6 +6,7 @@ use DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
 use Pusher\Pusher;
+use WebSocket\Client;
 
 class SocketHelper
 {
@@ -100,9 +101,38 @@ class SocketHelper
             $pusher->trigger('chat-channel', 'notify', $data);
 
         }
+        else if( $setting['name'] == "iProtek WebSocket" ){
+
+            $url = $setting['url'];
+            $cluster = $setting['cluster'];
+            $app_id = $setting['app_id'];
+            $key = $setting['key'];
+            $secret = $setting['secret'];
+            
+            try{    
+                $client = new Client($url."?cluster=".$cluster."&app_id=".$app_id."&key=".$key);
+                $client->send( json_encode(
+                    [
+                        "secret"=>$secret,
+                        "type"=>"message",
+                        "data"=>$data,
+                        "event"=>"notify",
+                        "channel"=>"chat-channel",
+                        "key"=>$key
+                    ]
+                ));
+
+                $client->close();
+                Log::error("Sent Successfully");
+
+            }catch(\Exception $ex){
+                Log::error($ex->getMessage());
+            }
+        }   
+        Log::error("Triggered");
         
 
-        return ["status"=>1, "message"=>"Submittied"];
+        return ["status"=>1, "message"=>"Submitted"];
 
     }
     
