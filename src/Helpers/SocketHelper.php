@@ -38,7 +38,8 @@ class SocketHelper
                         "name"=>isset($socket_settings['socket_name']) ? $socket_settings['socket_name'] :"",
                         "key"=>isset($socket_settings['key']) ? $socket_settings['key']:"",
                         "cluster"=>isset($socket_settings['cluster']) ? $socket_settings['cluster'] :"",
-                        "url"=>isset($socket_settings['url']) ? $socket_settings['url'] :""
+                        "url"=>isset($socket_settings['url']) ? $socket_settings['url'] :"",
+                        "app_id"=>isset($socket_settings['app_id']) ? $socket_settings['app_id'] :""
                     ];
                 }
             }
@@ -53,7 +54,8 @@ class SocketHelper
                             "key"=>$socket_settings->key,
                             "secret"=>$socket_settings->secret,
                             "cluster"=>$socket_settings->cluster,
-                            "url"=>$socket_settings->url
+                            "url"=>$socket_settings->url,
+                            "app_id"=>$socket_settings->app_id
                         ];
                     }
                     return [
@@ -61,7 +63,8 @@ class SocketHelper
                         "name"=>$socket_settings->socket_name,
                         "key"=>$socket_settings->key,
                         "cluster"=>$socket_settings->cluster,
-                        "url"=>$socket_settings->url
+                        "url"=>$socket_settings->url,
+                        "app_id"=>$socket_settings->app_id
                     ];
                 }
             }
@@ -72,7 +75,8 @@ class SocketHelper
             "key"=>"",
             "cluster"=>"",
             "message"=>"Not Found.",
-            "url"=>""
+            "url"=>"",
+            "app_id"=>""
         ];
     }
 
