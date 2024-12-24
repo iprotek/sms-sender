@@ -29,14 +29,16 @@ class SocketHelper
                             "name"=>isset($socket_settings['socket_name']) ? $socket_settings['socket_name'] :"",
                             "key"=>isset($socket_settings['key']) ? $socket_settings['key']:"",
                             "secret"=>isset($socket_settings['secret']) ? $socket_settings['secret']:"",
-                            "cluster"=>isset($socket_settings['cluster']) ? $socket_settings['cluster'] :""
+                            "cluster"=>isset($socket_settings['cluster']) ? $socket_settings['cluster'] :"",
+                            "url"=>isset($socket_settings['url']) ? $socket_settings['url'] :"",
                         ];
                     }
                     return [
                         "is_active"=> isset($socket_settings['is_active']) ? $socket_settings['is_active']: false,
                         "name"=>isset($socket_settings['socket_name']) ? $socket_settings['socket_name'] :"",
                         "key"=>isset($socket_settings['key']) ? $socket_settings['key']:"",
-                        "cluster"=>isset($socket_settings['cluster']) ? $socket_settings['cluster'] :""
+                        "cluster"=>isset($socket_settings['cluster']) ? $socket_settings['cluster'] :"",
+                        "url"=>isset($socket_settings['url']) ? $socket_settings['url'] :""
                     ];
                 }
             }
@@ -50,14 +52,16 @@ class SocketHelper
                             "name"=>$socket_settings->socket_name,
                             "key"=>$socket_settings->key,
                             "secret"=>$socket_settings->secret,
-                            "cluster"=>$socket_settings->cluster
+                            "cluster"=>$socket_settings->cluster,
+                            "url"=>$socket_settings->url
                         ];
                     }
                     return [
                         "is_active"=>$socket_settings->is_active,
                         "name"=>$socket_settings->socket_name,
                         "key"=>$socket_settings->key,
-                        "cluster"=>$socket_settings->cluster
+                        "cluster"=>$socket_settings->cluster,
+                        "url"=>$socket_settings->url
                     ];
                 }
             }
@@ -67,7 +71,8 @@ class SocketHelper
             "name"=>"",
             "key"=>"",
             "cluster"=>"",
-            "message"=>"Not Found."
+            "message"=>"Not Found.",
+            "url"=>""
         ];
     }
 
