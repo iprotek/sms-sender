@@ -48,9 +48,9 @@ class SmsClientApiRequestLinkController extends _CommonController
         else if($request->sender_type == 'm360'){
             $this->validate($request, [
                 "name"=>"required|min:3|unique:sms_client_api_request_links,name".($sms_api_client ? ",".$sms_api_client->id:""),
-                "api_name"=>"required",
-                "api_username"=>"required",
-                "api_password"=>($is_add ? "required":"nullable"),
+                "api_name"=>"required", //Registered ID
+                "api_username"=>"required", //app_key
+                "api_password"=>($is_add ? "required":"nullable"), //app_secret
                 "api_version"=>"required"
             ]);
         }
