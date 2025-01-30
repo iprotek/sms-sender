@@ -135,7 +135,7 @@ class SmsClientApiRequestLinkController extends _CommonController
             $data->where('name','LIKE', $search_text);
         }
         $data->where('is_active', 1);
-        $data->select('id', \DB::raw(" CONCAT(  name, ' ( ', type, ' )') as text"));
+        $data->select('id', \DB::raw(" CONCAT(  name, ' ( ', type, ' )') as text"), 'type');
         $data->orderBy('priority', 'ASC');
         if($request->is_all){
             return $data->get();
