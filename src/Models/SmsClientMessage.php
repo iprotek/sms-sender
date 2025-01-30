@@ -22,7 +22,11 @@ class SmsClientMessage extends _CommonModel
         "sms_api_request_link_id",
         "data_id",
         "sender_id",
-        "sent_at"
+        "sent_at",
+
+        "sms_request_response",
+        "sms_request_response_code",
+        "webhook_response"
     ];
 
     public $casts =[
