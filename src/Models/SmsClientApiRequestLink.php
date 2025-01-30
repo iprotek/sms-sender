@@ -28,6 +28,7 @@ class SmsClientApiRequestLink extends _CommonModel
         "priority",
         "last_sending_at",
         "is_auto",
+        
         "type",
         "header_info",
         "is_default",
@@ -42,6 +43,7 @@ class SmsClientApiRequestLink extends _CommonModel
 
     public $casts = [
         "is_active"=>"boolean",
-        "is_webhook_active"=>"boolean"
+        "is_webhook_active"=>"boolean",
+        "is_default"=>"boolean"
     ];
 }

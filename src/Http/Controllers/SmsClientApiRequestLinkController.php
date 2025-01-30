@@ -36,13 +36,25 @@ class SmsClientApiRequestLinkController extends _CommonController
 
     public function add_client(Request $request){
 
-        $this->validate($request, [
-            "name"=>"required|min:3|unique:sms_client_api_request_links,name",
-            "api_name"=>"required",
-            "api_username"=>"required",
-            "api_password"=>"required",
-            "api_url"=>"required|unique:sms_client_api_request_links,api_url"
-        ]);
+        if($request->sender_type == 'iprotek'){
+            $this->validate($request, [
+                "name"=>"required|min:3|unique:sms_client_api_request_links,name",
+                "api_name"=>"required",
+                "api_username"=>"required",
+                "api_password"=>"required",
+                "api_url"=>"required|unique:sms_client_api_request_links,api_url"
+            ]);
+        }
+        else if($request->sender_type == 'm360'){
+            $this->validate($request, [
+                "name"=>"required|min:3|unique:sms_client_api_request_links,name",
+                "api_name"=>"required",
+                "api_username"=>"required",
+                "api_password"=>"required",
+                "api_version"=>"required"
+            ]);
+
+        }
 
         $is_active = $request->is_active ? 1 : 0;
 
@@ -52,7 +64,8 @@ class SmsClientApiRequestLinkController extends _CommonController
                     //NAME
                     //USERNAME
                     //PASSWORD
-        if($is_active){
+        //Constraint checking from iprotek sms server
+        if($is_active && $request->sender_type == 'iprotek'){
            $result = PaySmsHelper::checkApi($request->api_url,$request->api_name, $request->api_username, $request->api_password );
             if($result['status'] == 0){
                 return $result;
@@ -63,10 +76,16 @@ class SmsClientApiRequestLinkController extends _CommonController
             "api_name"=>$request->api_name,
             "api_username"=>$request->api_username,
             "api_password"=>$request->api_password,
-            "api_url"=>$request->api_url,
+            "api_url"=>$request->api_url ?? "",
             "is_active"=>$is_active,
             "is_webhook_active" => 1,
-            "priority"=>$request->priority
+            "priority"=>$request->priority,
+            
+            //NEW
+            "type"=>$request->sender_type,
+            "is_default"=>$request->is_default,
+            "api_version"=>$request->api_version,
+            "messenger_sms_api_request_link_id"=>$request->messenger_sms_api_request_link_id
         ]);
 
         /*

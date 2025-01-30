@@ -9,7 +9,7 @@ use Illuminate\Http\Request;
 use iProtek\SmsSender\Models\SmsClientApiRequestLink;
 use iProtek\SmsSender\Models\SmsClientMessage;
 
-class M360SmsApiHelper
+class M360Sms349ApiHelper
 { 
     public static $version = "3.4.9";
 
