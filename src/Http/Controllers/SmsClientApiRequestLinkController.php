@@ -176,6 +176,7 @@ class SmsClientApiRequestLinkController extends _CommonController
         if($validate["status"] == 0){
             return $validate;
         }
+ 
 
         $is_active = $request->is_active ? 1 : 0;
  
@@ -189,6 +190,7 @@ class SmsClientApiRequestLinkController extends _CommonController
                 return $result;
             }
         }
+
         if($request->name)
             $sms_api_client_id->name = $request->name;
         if($request->api_name)
@@ -203,6 +205,12 @@ class SmsClientApiRequestLinkController extends _CommonController
         $sms_api_client_id->is_active = $request->is_active; 
         $sms_api_client_id->is_webhook_active = $request->is_webhook_active;
         $sms_api_client_id->priority = $request->priority;
+ 
+        //ADDITIONAL
+        $sms_api_client_id->is_default = $request->is_default;
+        $sms_api_client_id->type = $request->sender_type;
+        $sms_api_client_id->messenger_sms_api_request_link_id = $request->messenger_sms_api_request_link_id;
+        $sms_api_client_id->api_version = $request->api_version;
 
         if($sms_api_client_id->isDirty()){
             $sms_api_client_id->save();
