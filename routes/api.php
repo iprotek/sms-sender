@@ -38,6 +38,7 @@ Route::prefix('api')->middleware('api')->name('api')->group(function(){
       //GET RESPONSE FROM SENDER
       Route::post('response/{sms_client_api_id}', [SmsClientApiRequestLinkController::class, 'api_response'])->name('.response')->middleware(['signed']);
 
+      
     });
     
 

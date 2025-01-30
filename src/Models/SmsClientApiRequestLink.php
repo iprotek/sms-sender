@@ -26,7 +26,13 @@ class SmsClientApiRequestLink extends _CommonModel
         "webhook_response_url",
         "is_webhook_active",
         "priority",
-        "last_sending_at"
+        "last_sending_at",
+        "is_auto",
+        "type",
+        "header_info",
+        "is_default",
+        "api_version",
+        "messenger_sms_api_request_link_id"
     ];
 
     

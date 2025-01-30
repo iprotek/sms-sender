@@ -183,4 +183,10 @@ class SmsClientApiRequestLinkController extends _CommonController
         return ["status"=>1, "message"=>"Successfully received."];
     }
 
+    public function api_service_list(Request $request){
+         
+        $result = \iProtek\SmsSender\Helpers\PayMessageHttp::get_client('api/sms-service-apis/list' );
+        return $result;
+    }
+
 }

@@ -34,15 +34,23 @@ Route::middleware(['web'])->group(function(){
             });
 
             //SMS-SENDER
-            Route::get('/',[SmsClientApiRequestLinkController::class, 'index']);
-            Route::get('list', [SmsClientApiRequestLinkController::class, 'list'] )->name('.list');
-            Route::get('list/{sms_api_client_id}', [SmsClientApiRequestLinkController::class, 'list'] )->name('.get-one');
-            Route::post('add-client', [SmsClientApiRequestLinkController::class, 'add_client'] )->name('.add');
-            Route::put('update-client/{sms_api_client_id}', [SmsClientApiRequestLinkController::class, 'update_client'] )->name('.add');
-            Route::get('/list-selection', [SmsClientApiRequestLinkController::class, 'list_selection'] )->name('.list-selection');
-            Route::post('send-message/{sms_api_client_id}', [SmsClientApiRequestLinkController::class, 'send_message'] )->name('.send-message');
-            Route::get('list-messages', [SmsClientMessageController::class, 'list'] )->name('.list-message');
-            Route::delete('delete-message/{id}', [SmsClientMessageController::class, 'delete_message'] )->name('.delete-message');
+            Route::middleware(['can:superadmin'])->group(function(){
+
+                Route::get('/',[SmsClientApiRequestLinkController::class, 'index']);
+                Route::get('list', [SmsClientApiRequestLinkController::class, 'list'] )->name('.list');
+                Route::get('list/{sms_api_client_id}', [SmsClientApiRequestLinkController::class, 'list'] )->name('.get-one');
+                Route::post('add-client', [SmsClientApiRequestLinkController::class, 'add_client'] )->name('.add');
+                Route::put('update-client/{sms_api_client_id}', [SmsClientApiRequestLinkController::class, 'update_client'] )->name('.add');
+                Route::get('/list-selection', [SmsClientApiRequestLinkController::class, 'list_selection'] )->name('.list-selection');
+                Route::post('send-message/{sms_api_client_id}', [SmsClientApiRequestLinkController::class, 'send_message'] )->name('.send-message');
+                Route::get('list-messages', [SmsClientMessageController::class, 'list'] )->name('.list-message');
+                Route::delete('delete-message/{id}', [SmsClientMessageController::class, 'delete_message'] )->name('.delete-message');
+                
+                Route::get('/service-list',  [SmsClientApiRequestLinkController::class, 'api_service_list'])->name('.service-list');
+
+
+            });
+            
         });
 
         //Route Message
