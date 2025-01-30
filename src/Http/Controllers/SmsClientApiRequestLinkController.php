@@ -34,26 +34,49 @@ class SmsClientApiRequestLinkController extends _CommonController
         return $data->paginate(10);
     }
 
-    public function add_client(Request $request){
+    public function client_validate(Request $request, $is_add = true, SmsClientApiRequestLink $sms_api_client = null){
 
         if($request->sender_type == 'iprotek'){
             $this->validate($request, [
-                "name"=>"required|min:3|unique:sms_client_api_request_links,name",
+                "name"=>"required|min:3|unique:sms_client_api_request_links,name".($sms_api_client ? ",".$sms_api_client->id:""),
                 "api_name"=>"required",
                 "api_username"=>"required",
-                "api_password"=>"required",
+                "api_password"=>($is_add ? "required":"nullable"),
                 "api_url"=>"required|unique:sms_client_api_request_links,api_url"
             ]);
         }
         else if($request->sender_type == 'm360'){
             $this->validate($request, [
-                "name"=>"required|min:3|unique:sms_client_api_request_links,name",
+                "name"=>"required|min:3|unique:sms_client_api_request_links,name".($sms_api_client ? ",".$sms_api_client->id:""),
                 "api_name"=>"required",
                 "api_username"=>"required",
-                "api_password"=>"required",
+                "api_password"=>($is_add ? "required":"nullable"),
                 "api_version"=>"required"
             ]);
+        }
+        else if($request->sender_type == 'iprotek-messenger'){
+            $this->validate($request, [
+                "name"=>"required|min:3|unique:sms_client_api_request_links,name".($sms_api_client ? ",".$sms_api_client->id:""),
+            ]);
+            if(!$request->messenger_sms_api_request_link_id || !is_numeric($request->messenger_sms_api_request_link_id)){
+                return ["status"=>0, "message"=>"Please select messenger API"];
+            }
+            $sms_link_id = $request->messenger_sms_api_request_link_id * 1;
+            if($sms_link_id <= 0){
+                return ["status"=>0, "message"=>"Required messenger API"];
+            }
+        }
+        else{
+            return ["status"=>0, "message"=>"Api Type invalidated"];
+        }
+        return ["status"=>1, "message"=>"valid"];
+    }
 
+    public function add_client(Request $request){
+        
+        $validate = $this->client_validate($request);
+        if($validate["status"] == 0){
+            return $validate;
         }
 
         $is_active = $request->is_active ? 1 : 0;
@@ -74,8 +97,8 @@ class SmsClientApiRequestLinkController extends _CommonController
         $data = SmsClientApiRequestLink::create([
             "name"=>$request->name,
             "api_name"=>$request->api_name,
-            "api_username"=>$request->api_username,
-            "api_password"=>$request->api_password,
+            "api_username"=>$request->api_username ?? "" ,
+            "api_password"=>$request->api_password ?? "",
             "api_url"=>$request->api_url ?? "",
             "is_active"=>$is_active,
             "is_webhook_active" => 1,
@@ -149,16 +172,14 @@ class SmsClientApiRequestLinkController extends _CommonController
 
     public function update_client(Request $request, SmsClientApiRequestLink $sms_api_client_id){
 
-        $this->validate($request, [
-            "name"=>"required|min:3|unique:sms_client_api_request_links,name,".$sms_api_client_id->id,
-            "api_name"=>"required",
-            "api_username"=>"required",
-            "api_url"=>"required|unique:sms_client_api_request_links,api_url,".$sms_api_client_id->id
-        ]);
+        $validate = $this->client_validate($request, false, $sms_api_client_id);
+        if($validate["status"] == 0){
+            return $validate;
+        }
 
         $is_active = $request->is_active ? 1 : 0;
  
-        if($is_active){
+        if($is_active && $request->sender_type == 'iprotek'){
             if($request->api_password)
               $result = PaySmsHelper::checkApi($request->api_url,$request->api_name, $request->api_username, $request->api_password );
             else
@@ -168,15 +189,21 @@ class SmsClientApiRequestLinkController extends _CommonController
                 return $result;
             }
         }
-        $sms_api_client_id->name = $request->name;
-        $sms_api_client_id->api_name = $request->api_name;
-        $sms_api_client_id->api_username = $request->api_username;
+        if($request->name)
+            $sms_api_client_id->name = $request->name;
+        if($request->api_name)
+            $sms_api_client_id->api_name = $request->api_name;
+        if($request->api_username)
+            $sms_api_client_id->api_username = $request->api_username;
         if($request->api_password)
             $sms_api_client_id->api_password = $request->api_password;
-        $sms_api_client_id->api_url = $request->api_url;
-        $sms_api_client_id->is_active = $request->is_active;
+        
+        if($request->api_url)
+            $sms_api_client_id->api_url = $request->api_url;
+        $sms_api_client_id->is_active = $request->is_active; 
         $sms_api_client_id->is_webhook_active = $request->is_webhook_active;
         $sms_api_client_id->priority = $request->priority;
+
         if($sms_api_client_id->isDirty()){
             $sms_api_client_id->save();
         } 
@@ -204,8 +231,8 @@ class SmsClientApiRequestLinkController extends _CommonController
 
     public function api_service_list(Request $request){
          
-        $result = \iProtek\SmsSender\Helpers\PayMessageHttp::get_client('api/sms-service-apis/list' );
-        return $result;
+        $result = \iProtek\SmsSender\Helpers\PayMessageHttp::get_client('api/sms-service-apis/list?search='.$request->search_text );
+        return $result["result"];
     }
 
 }
