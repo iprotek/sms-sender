@@ -18,7 +18,7 @@ class M360Sms349ApiHelper
     public static function client($headers=[]){
         
         $client = new \GuzzleHttp\Client([
-            'base_uri' => "https://api.m360.com.ph/v3/api/",
+            'base_uri' => "https://api.m360.com.ph",
             "http_errors"=>false, 
             "verify"=>false, 
             "curl"=>[
@@ -50,19 +50,9 @@ class M360Sms349ApiHelper
             "target_name"=>"m360",
             "sms_client_api_request_link_id"=>$api->id
         ]); 
-
-        return["status"=>1, "message"=>
-        json_decode(json_encode([
-            "app_key"=>$api->api_username,
-            "app_secret"=>$api->api_password,
-            "msisdn"=>$to_cp_no,
-            "content"=>$message,
-            "shortcode_mask"=>$api->api_name,
-            "rcvd_transid"=>$smsMessage->id,
-            "is_intl"=>false,
-        ]))];
+ 
         
-        $response = $client->post('broadcast', 
+        $response = $client->post('/v3/api/broadcast', 
         [
             "body"=>json_encode(
                 [
@@ -78,6 +68,8 @@ class M360Sms349ApiHelper
         ]);
         $response_code = $response->getStatusCode(); 
         $result = $response->getBody();  
+
+        Log::error($result);
 
         $smsMessage->sms_request_response_code = $response_code;
         $smsMessage->sms_request_response = json_encode($result);
