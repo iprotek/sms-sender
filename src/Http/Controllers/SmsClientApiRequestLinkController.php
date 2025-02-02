@@ -36,14 +36,14 @@ class SmsClientApiRequestLinkController extends _CommonController
 
     public function client_validate(Request $request, $is_add = true, SmsClientApiRequestLink $sms_api_client = null){
 
-        if($request->sender_type == 'iprotek'){
+        if($request->sender_type == 'iprotek'){ 
             $this->validate($request, [
                 "name"=>"required|min:3|unique:sms_client_api_request_links,name".($sms_api_client ? ",".$sms_api_client->id:""),
                 "api_name"=>"required",
                 "api_username"=>"required",
                 "api_password"=>($is_add ? "required":"nullable"),
-                "api_url"=>"required|unique:sms_client_api_request_links,api_url"
-            ]);
+                "api_url"=>"required|unique:sms_client_api_request_links,api_url".($sms_api_client ? ",".$sms_api_client->id:"")
+            ]); 
         }
         else if($request->sender_type == 'm360'){
             $this->validate($request, [
