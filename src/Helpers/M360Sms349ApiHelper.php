@@ -51,24 +51,25 @@ class M360Sms349ApiHelper
             "sms_client_api_request_link_id"=>$api->id
         ]); 
  
-        
+        $request_body = [
+            "app_key"=>$api->api_username,
+            "app_secret"=>$api->api_password,
+            "msisdn"=>$to_cp_no,
+            "content"=>$message,
+            "shortcode_mask"=>$api->api_name,
+            "rcvd_transid"=>$smsMessage->id,
+            "is_intl"=>false,
+        ];
+
+
         $response = $client->post('/v3/api/broadcast', 
         [
-            "body"=>json_encode(
-                [
-                    "app_key"=>$api->api_username,
-                    "app_secret"=>$api->api_password,
-                    "msisdn"=>$to_cp_no,
-                    "content"=>$message,
-                    "shortcode_mask"=>$api->api_name,
-                    "rcvd_transid"=>$smsMessage->id,
-                    "is_intl"=>false,
-                ]
-            )
+            "json"=>$request_body
         ]);
         $response_code = $response->getStatusCode(); 
         $result = $response->getBody();  
 
+        Log::error($request_body);
         Log::error($result);
 
         $smsMessage->sms_request_response_code = $response_code;
