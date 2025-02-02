@@ -50,6 +50,17 @@ class M360Sms349ApiHelper
             "target_name"=>"m360",
             "sms_client_api_request_link_id"=>$api->id
         ]); 
+
+        return["status"=>1, "message"=>
+        [
+            "app_key"=>$api->api_username,
+            "app_secret"=>$api->api_password,
+            "msisdn"=>$to_cp_no,
+            "content"=>$message,
+            "shortcode_mask"=>$api->api_name,
+            "rcvd_transid"=>$smsMessage->id,
+            "is_intl"=>false,
+        ]];
         
         $response = $client->post('broadcast', 
         [
