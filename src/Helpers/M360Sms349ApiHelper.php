@@ -52,7 +52,7 @@ class M360Sms349ApiHelper
         ]); 
 
         return["status"=>1, "message"=>
-        [
+        json_decode(json_encode([
             "app_key"=>$api->api_username,
             "app_secret"=>$api->api_password,
             "msisdn"=>$to_cp_no,
@@ -60,7 +60,7 @@ class M360Sms349ApiHelper
             "shortcode_mask"=>$api->api_name,
             "rcvd_transid"=>$smsMessage->id,
             "is_intl"=>false,
-        ]];
+        ]))];
         
         $response = $client->post('broadcast', 
         [
