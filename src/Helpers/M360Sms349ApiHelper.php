@@ -69,12 +69,12 @@ class M360Sms349ApiHelper
         $response_code = $response->getStatusCode(); 
         $result = $response->getBody();  
 
-        Log::error($request_body);
-        Log::error($result);
+        //Log::error($request_body);
+        //Log::error($result);
+
 
         $smsMessage->sms_request_response_code = $response_code;
-        $smsMessage->sms_request_response = json_encode($result);
-
+        $smsMessage->sms_request_response = json_encode( json_decode( $result,TRUE) );
         $smsMessage->save();
         
         if($response_code != 200 && $response_code != 201){
