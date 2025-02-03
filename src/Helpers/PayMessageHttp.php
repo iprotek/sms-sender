@@ -187,6 +187,5 @@ class PayMessageHttp
     public static function post_api_client($url, $body, $raw_response = false, $error_default = null){
         return static::post_client($url, $body, $raw_response, $error_default, true);
     }
- 
 
 }
