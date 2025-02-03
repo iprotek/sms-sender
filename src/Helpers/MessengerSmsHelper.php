@@ -31,7 +31,7 @@ class MessengerSmsHelper
         $target_name = $data['target_name']; 
         
         $result = \iProtek\SmsSender\Helpers\PayMessageHttp::post_client('api/sms-service-apis/send', $data );
-        return $result["result"]; 
+        return $result; 
 
 
     }
