@@ -25,6 +25,10 @@ class MessageController extends Controller
         if(is_array($result)){
             $result['submit_query'] = $qString;
         }
+        else if(is_object($result)){
+            $result->submit_query = $qString;
+        }
+
         return $result; 
 
     }
