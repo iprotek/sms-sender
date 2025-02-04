@@ -22,7 +22,7 @@ class MessageController extends Controller
     public function notifications(Request $request){
         $qString = $request->q ?: "";
         $result = \iProtek\SmsSender\Helpers\PayMessageHttp::get_client('/api/message-notifications?q='.$qString);
-        if($result){
+        if(is_array($result)){
             $result['submit_query'] = $qString;
         }
         return $result; 
