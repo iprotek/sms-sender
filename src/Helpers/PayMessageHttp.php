@@ -71,7 +71,9 @@ class PayMessageHttp
             "SOURCE-NAME"=>config('app.name'),
             "PAY-USER-ACCOUNT-ID"=>$pay_app_user_account_id."",
             "PAY-PROXY-ID"=>$proxy_id,
-            "Authorization"=>"Bearer ".($token?:"")
+            "Authorization"=>"Bearer ".($token?:""),
+            "SYSTEM-ID" => config('iprotek.system_id'), 
+            "SYSTEM-URL" => config('iprotek.system')
         ];
         
         $base_url = $is_api ? $pay_message."/api/group/$proxy_id" : $pay_message;
