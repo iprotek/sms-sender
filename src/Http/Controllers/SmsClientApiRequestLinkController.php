@@ -27,11 +27,21 @@ class SmsClientApiRequestLinkController extends _CommonController
     }
  
     public function list(Request $request){
+        
         $data = SmsClientApiRequestLink::on();
+        
         if(isset($request->sms_api_client_id)){
             return $data->find($request->sms_api_client_id);
         }
+
+        //return $this->apiModelSelect(SmsClientApiRequestLink::class, $request, true, true);
+        if($request->search_text && trim($request->search_text)){
+            $search_text = '%'.str_replace(' ', '%', $request->search_text).'%';
+            $data->whereRaw(' CONCAT(name,type) = ? ', [$search_text]);
+        }
+
         return $data->paginate(10);
+    
     }
 
     public function client_validate(Request $request, $is_add = true, SmsClientApiRequestLink $sms_api_client = null){
