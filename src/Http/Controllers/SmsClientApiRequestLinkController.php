@@ -37,8 +37,14 @@ class SmsClientApiRequestLinkController extends _CommonController
         //return $this->apiModelSelect(SmsClientApiRequestLink::class, $request, true, true);
         if($request->search_text && trim($request->search_text)){
             $search_text = '%'.str_replace(' ', '%', $request->search_text).'%';
-            $data->whereRaw(' CONCAT(name,type) = ? ', [$search_text]);
+            $data->whereRaw(' CONCAT(name,type) LIKE ? ', [$search_text]);
         }
+
+        if($request->active_only){
+            $data->where('is_active', true);
+        }
+
+        $data->select('*', 'name as text');
 
         return $data->paginate(10);
     
@@ -101,6 +107,7 @@ class SmsClientApiRequestLinkController extends _CommonController
         if($is_active && $request->sender_type == 'iprotek'){
            $result = PaySmsHelper::checkApi($request->api_url,$request->api_name, $request->api_username, $request->api_password );
             if($result['status'] == 0){
+                return ["status"=>0, "message"=>"Something goes wrong.".$request->api_url];
                 return $result;
             }
         }

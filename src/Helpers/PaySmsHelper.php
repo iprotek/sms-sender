@@ -23,8 +23,8 @@ class PaySmsHelper
         $client = static::client($api_url, $api_name, $api_username, $api_pass);
         
         $response = $client->get('');
-
         $result = static::response_result($response, false, null);
+        Log::error($result);
         if($result['status'] == 0){ 
             return ["status"=>0, "message"=>"Failed"];
         }
