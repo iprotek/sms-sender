@@ -99,7 +99,9 @@ class AutoSelectSmsHelper
                 else{
                     $smsMessage->status_id = 2;
                 }
-                $smsMessage->data_id = $result->data_id;
+                if(isset($result->data_id))
+                    $smsMessage->data_id = $result->data_id;
+                
                 $smsMessage->status_info = $result->message;
                 $smsMessage->save();
                 return $details["result"];
