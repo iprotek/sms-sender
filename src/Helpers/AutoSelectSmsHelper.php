@@ -25,8 +25,10 @@ class AutoSelectSmsHelper
     
     }
 
-    public static function send($mobile_no, $message, SmsClientApiRequestLink $smsClient = null, $target_id = 0){
+    public static function send($mobile_no, $message, SmsClientApiRequestLink $smsClient, $target_id = 0){
 
+
+        echo json_encode($smsClient->type);
         if( !static::isValidInternationalMobile($mobile_no) ){
 
             $smsMessage = SmsClientMessage::create([
@@ -40,11 +42,25 @@ class AutoSelectSmsHelper
             ]);
             return ["status"=>0, "message"=>"Invalid number"]; 
         }
+        else if(!$smsClient->is_active){
+
+            $smsMessage = SmsClientMessage::create([
+                "to_number"=>$mobile_no,
+                "message"=>$message,
+                "target_id"=>$target_id,
+                "target_name"=>$target_name,
+                "status_id"=>2,
+                "status_info"=>"SMS Sender API is currently disabled.",
+                "sms_client_api_request_link_id"=>($smsClient ? $smsClient->id : null)
+            ]);
+
+            return ["status"=>0, "message"=>"Inactive Sender"];
+        }
  
  
         if($smsClient->type == "m360"){            
             
-            $details = M360Sms349ApiHelper::send($smsClient, $valid_mobile_no, $message, $target_id);
+            $details = M360Sms349ApiHelper::send($smsClient, $mobile_no, $message, $target_id);
             
             return ["status"=>1, "message"=>"m360 sms submitted."];
             
@@ -64,16 +80,40 @@ class AutoSelectSmsHelper
 
             $details = \iProtek\SmsSender\Helpers\MessengerSmsHelper::send([
                 "message_sms_api_request_link_id" => $smsClient->messenger_sms_api_request_link_id,
-                "mobile_no"=>$valid_mobile_no,
+                "mobile_no"=>$mobile_no,
                 "api_request_link_id"=>$smsClient->id,
                 "message"=>$message,
                 "target_id"=>$target_id,
                 "target_name"=>"iprotek-messenger"
             ]);
-             //Log::error("iprotek-messenger result");
-             Log::error($details);
-             Log::error($smsMessage);
-            return ["status"=>1, "message"=>"iProtek Messenger submitted."];
+            //Log::error("iprotek-messenger result");
+            //Log::error($details);
+            //Log::error($smsMessage);
+            if(isset($details["result"])){
+
+                $result = json_decode(json_encode($details["result"]));
+
+                if($result->status == 1){
+                    $smsMessage->status_id = 1;
+                }
+                else{
+                    $smsMessage->status_id = 2;
+                }
+                $smsMessage->data_id = $result->data_id;
+                $smsMessage->status_info = $result->message;
+                $smsMessage->save();
+                return $details["result"];
+            }
+            else if($details["status"] == 0){
+                $smsMessage->status_id = 2;
+                $smsMessage->status_info = $details["message"];
+                $smsMessage->save();
+                return ["status"=>0, "message"=>$details["message"]];
+            }
+            $smsMessage->status_id = 2;
+            $smsMessage->status_info = "Something goes wrong.";
+
+            return ["status"=>0, "message"=>"Something goes wrong."];
         }
 
         //DEFAULT  IPROTEK
