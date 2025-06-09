@@ -28,7 +28,7 @@ class AutoSelectSmsHelper
     public static function send($mobile_no, $message, SmsClientApiRequestLink $smsClient, $target_id = 0){
 
 
-        echo json_encode($smsClient->type);
+        //echo json_encode($smsClient->type);
         if( !static::isValidInternationalMobile($mobile_no) ){
 
             $smsMessage = SmsClientMessage::create([
