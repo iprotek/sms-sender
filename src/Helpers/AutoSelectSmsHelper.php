@@ -86,7 +86,7 @@ class AutoSelectSmsHelper
                 "target_id"=>$target_id,
                 "target_name"=>"iprotek-messenger"
             ]);
-            //Log::error("iprotek-messenger result");
+            
             if(is_object($details) && !is_array($details)){
                 $details = json_decode( json_encode( $details) , TRUE);
             }
