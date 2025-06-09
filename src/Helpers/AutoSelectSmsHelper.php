@@ -87,9 +87,15 @@ class AutoSelectSmsHelper
                 "target_name"=>"iprotek-messenger"
             ]);
             //Log::error("iprotek-messenger result");
-            //Log::error($details);
-            //Log::error($smsMessage);
-            if(isset($details["result"])){
+            if(is_object($details) && !is_array($details)){
+                $details = json_decode( json_encode( $details) , TRUE);
+            }
+
+            if($details === null){
+                return ["status"=>0, "message"=>"Something wrong with your sms sender endpoints."];
+            }
+            
+            if(  isset($details["result"]) ){
 
                 $result = json_decode(json_encode($details["result"]));
 
