@@ -103,7 +103,7 @@ class PaySmsHelper
 
         $result_data = $result['result'];
 
-        Log::error($result_data);
+        //Log::error($result_data);
 
         $smsMessage->data_id = $result_data['data_id'];
         $smsMessage->sender_id = $result_data['sender_id'];
