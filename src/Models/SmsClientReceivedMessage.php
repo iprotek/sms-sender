@@ -33,7 +33,7 @@ class SmsClientReceivedMessage extends Model
             //logger('Creating model:', $model->toArray());
             //CHECK THE NUMBER IF EXISTS
 
-            $exists = SmsClientMobileNoInfo::whereRaw('mobile_no LIKE RIGHT(?, 10) ')->first();
+            $exists = SmsClientMobileNoInfo::whereRaw('mobile_no LIKE RIGHT(?, 10) ',[$model->to_number])->first();
             if(!$exists){
                 SmsClientMobileNoInfo::create([
                     "pay_created_by"=>$model->pay_created_by,
