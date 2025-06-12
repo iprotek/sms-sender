@@ -20,5 +20,6 @@ class SmsClientReceivedMessage extends Model
         "sender_id",
         "data_id",
         "received_at",
+        "sms_sender_data_id"
     ];
 }

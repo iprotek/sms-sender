@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use iProtek\SmsSender\Models\SmsClientApiRequestLink;
 use iProtek\Core\Http\Controllers\_Common\_CommonController;
 use iProtek\SmsSender\Helpers\PaySmsHelper;
+use iProtek\SmsSender\Models\SmsClientReceivedMessage;
 
 class SmsClientApiRequestLinkController extends _CommonController
 {
@@ -246,16 +247,34 @@ class SmsClientApiRequestLinkController extends _CommonController
             abort(403, 'SMS API WEBHOOK INACTTIVE');
         }
 
+        $this->validated($request, [
+            "from_mobile_no"=>"required",
+            "sender_id"=>"required",
+            "sms_sender_data_id"=>"required",
+            "message"=>"required",
+            "sms_api_request_link_id"=>"required"
+        ]);
 
         
         //ACTION: update-status
         //UPDATE SENT MESSAGE
 
-
         //ACTION: add-message
         //ADD NEW MESSAGE
 
-        return ["status"=>1, "message"=>"Successfully received."];
+        $received =  SmsClientReceivedMessage::create([
+            "from_number"=>$request->from_mobile_no,
+            "sender_id"=>$request->sms_sender_id,
+            "sms_sender_data_id"=>$request->sms_sender_data_id,
+            "message"=>$request->message,
+            "received_at"=>\Carbon\Carbon::now(),
+            "sms_client_api_request_link_id"=>$request->sms_client_api_id,
+            "sms_api_request_link_id"=>$request->sms_api_request_link_id
+        ]);
+
+        //SEND NOTIFICATIONS
+
+        return ["status"=>1, "message"=>"Successfully received.", "data_id"=>$received->id];
     }
 
     public function api_service_list(Request $request){
