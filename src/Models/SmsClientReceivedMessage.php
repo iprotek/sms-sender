@@ -34,19 +34,24 @@ class SmsClientReceivedMessage extends Model
             //logger('Creating model:', $model->toArray());
             //CHECK THE NUMBER IF EXISTS
             if(strlen( trim($model->to_number)) > 10){
-                $exists = SmsClientMobileNoInfo::whereRaw("mobile_no LIKE CONCAT('%', RIGHT(?, 10)) ",[$model->from_number])->first();
+                $mobile_info = SmsClientMobileNoInfo::whereRaw("mobile_no LIKE CONCAT('%', RIGHT(?, 10)) ",[$model->from_number])->first();
             }
             else{
-                $exists = SmsClientMobileNoInfo::whereRaw(" mobile_no = ? ", [$model->from_number])->first();
+                $mobile_info = SmsClientMobileNoInfo::whereRaw(" mobile_no = ? ", [$model->from_number])->first();
             }
-            if(!$exists){
-                SmsClientMobileNoInfo::create([
+            if(!$mobile_info){
+                $mobile_info = SmsClientMobileNoInfo::create([
                     "pay_created_by"=>$model->pay_created_by,
                     "group_id"=>$model->group_id,
                     "branch_id"=>$model->branch_id,
                     "mobile_no"=>$model->from_number
                 ]);
             }
+
+
+            //FORCE CONSTRAINT TO UNIFIED NUMBER OF +63, 63 and 0
+            $model->from_number =  $mobile_info->mobile_no;
+
             // Example: Add or modify a value before insert
             //$model->slug = Str::slug($model->name);
         });
