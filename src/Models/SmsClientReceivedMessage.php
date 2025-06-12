@@ -24,4 +24,28 @@ class SmsClientReceivedMessage extends Model
         "seen_at",
         "seen_by_pay_account_id"
     ];
+
+
+    protected static function booted()
+    {
+        static::creating(function ($model) {
+            // Access model values before inserting
+            //logger('Creating model:', $model->toArray());
+            //CHECK THE NUMBER IF EXISTS
+
+            $exists = SmsClientMobileNoInfo::whereRaw('mobile_no LIKE RIGHT(?, 10) ')->first();
+            if(!$exists){
+                SmsClientMobileNoInfo::create([
+                    "pay_created_by"=>$model->pay_created_by,
+                    "group_id"=>$model->group_id,
+                    "branch_id"=>$model->branch_id,
+                    "mobile_no"=>$model->from_number
+                ]);
+            }
+
+
+            // Example: Add or modify a value before insert
+            //$model->slug = Str::slug($model->name);
+        });
+    }
 }
