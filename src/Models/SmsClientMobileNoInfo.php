@@ -11,6 +11,7 @@ class SmsClientMobileNoInfo extends _CommonModel
     use HasFactory;
 
     public $fillable = [
+        "mobile_no",
         "name",
         "address",
         "other_infos"
