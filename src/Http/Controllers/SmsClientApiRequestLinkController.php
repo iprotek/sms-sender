@@ -187,7 +187,8 @@ class SmsClientApiRequestLinkController extends _CommonController
 
 
 
-        $result = \iProtek\SmsSender\Helpers\PaySmsHelper::send($request->to_number, $request->message, $sms_api_client_id);
+        $result = \iProtek\SmsSender\Helpers\PaySmsHelper::send($request->to_number, $request->message, $sms_api_client_id, null, null, $request);
+
         return $result;
         return ["status"=>1, "message"=>"Request sent successfully"];
     }

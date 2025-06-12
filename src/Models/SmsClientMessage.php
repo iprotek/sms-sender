@@ -5,7 +5,7 @@ namespace iProtek\SmsSender\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
-use iProtek\SmsSender\Models\_CommonModel;
+use iProtek\Core\Models\_CommonModel;
 use Illuminate\Support\Facades\Log;
 
 class SmsClientMessage extends _CommonModel
@@ -13,6 +13,7 @@ class SmsClientMessage extends _CommonModel
     use HasFactory, SoftDeletes;
     
     public $fillable = [
+        "pay_created_by",
         "to_number",
         "message",
         "target_id",

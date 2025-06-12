@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 //use iProtek\Core\Models\UserAdminPayAccount;
 use iProtek\SmsSender\Models\SmsClientApiRequestLink;
 use iProtek\SmsSender\Models\SmsClientMessage;
+use iProtek\Core\Helpers\PayModelHelper;
 
 class PaySmsHelper
 {
@@ -37,20 +38,28 @@ class PaySmsHelper
         return ["status"=>1, "message"=>"Successful"];
     }
 
-    public static function send($to_number, $message, SmsClientApiRequestLink $smsClient=null, $target_id = null, $target_name = null){
+    public static function send($to_number, $message, SmsClientApiRequestLink $smsClient=null, $target_id = null, $target_name = null, Request $request = null ){
         //action: add-sms
         if($smsClient == null){
             $smsClient = SmsClientApiRequestLink::where('is_active', 1)->orderBy('priority','ASC')->first();
+        } 
+        
+        $pay_account = \iProtek\Core\Models\UserAdminPayAccount::where('user_admin_id', auth('admin')->user()->id)->first();
+        $pay_created_by = null;
+        if($pay_account != null){
+            $pay_created_by = $pay_account->pay_app_user_account_id;
         }
-         
+
+
+
         $smsMessage = SmsClientMessage::create([
+            "pay_created_by"=>$pay_created_by,
             "to_number"=>$to_number,
             "message"=>$message,
             "target_id"=>$target_id,
             "target_name"=>$target_name,
             "sms_client_api_request_link_id"=>($smsClient ? $smsClient->id : null)
-        ]); 
-
+        ]);  
 
         if($smsClient == null){
 
