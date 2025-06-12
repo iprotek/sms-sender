@@ -43,7 +43,12 @@ class SmsClientMessage extends _CommonModel
             // Access model values before inserting
             //logger('Creating model:', $model->toArray());
             //CHECK THE NUMBER IF EXISTS
-            $exists = SmsClientMobileNoInfo::whereRaw("mobile_no LIKE CONCAT('%', RIGHT(?, 10)) ", [$model->to_number])->first();
+            if(strlen( trim($model->to_number)) > 10){
+                $exists = SmsClientMobileNoInfo::whereRaw("mobile_no LIKE CONCAT('%', RIGHT(?, 10)) ", [$model->to_number])->first();
+            }
+            else{
+                $exists = SmsClientMobileNoInfo::whereRaw(" mobile_no = ? ", [$model->to_number])->first();
+            }
             if(!$exists){
                 SmsClientMobileNoInfo::create([
                     "pay_created_by"=>$model->pay_created_by,
