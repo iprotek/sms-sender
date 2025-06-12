@@ -44,10 +44,14 @@ class PaySmsHelper
             $smsClient = SmsClientApiRequestLink::where('is_active', 1)->orderBy('priority','ASC')->first();
         } 
         
-        $pay_account = \iProtek\Core\Models\UserAdminPayAccount::where('user_admin_id', auth('admin')->user()->id)->first();
         $pay_created_by = null;
-        if($pay_account != null){
-            $pay_created_by = $pay_account->pay_app_user_account_id;
+        if(auth('admin')->check()){
+            $pay_account = \iProtek\Core\Models\UserAdminPayAccount::where('user_admin_id', auth('admin')->user()->id)->first();
+            if($pay_account != null){
+                $pay_created_by = $pay_account->pay_app_user_account_id;
+            }
+        }else if($request){
+            $pay_created_by = $request->header('PAY-USER-ACCOUNT-ID');
         }
 
 

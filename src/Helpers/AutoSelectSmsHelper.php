@@ -25,8 +25,17 @@ class AutoSelectSmsHelper
     
     }
 
-    public static function send($mobile_no, $message, SmsClientApiRequestLink $smsClient, $target_id = 0){
+    public static function send($mobile_no, $message, SmsClientApiRequestLink $smsClient, $target_id = 0, Request $request = null){
 
+        $pay_created_by = null;
+        if(auth('admin')->check()){
+            $pay_account = \iProtek\Core\Models\UserAdminPayAccount::where('user_admin_id', auth('admin')->user()->id)->first();
+            if($pay_account != null){
+                $pay_created_by = $pay_account->pay_app_user_account_id;
+            }
+        }else if($request){
+            $pay_created_by = $request->header('PAY-USER-ACCOUNT-ID');
+        }
 
         //echo json_encode($smsClient->type);
         if( !static::isValidInternationalMobile($mobile_no) ){
@@ -38,7 +47,8 @@ class AutoSelectSmsHelper
                 "target_name"=>$target_name,
                 "status_id"=>2,
                 "status_info"=>"Invalid number provided",
-                "sms_client_api_request_link_id"=>($smsClient ? $smsClient->id : null)
+                "sms_client_api_request_link_id"=>($smsClient ? $smsClient->id : null),
+                "pay_created_by"=>$pay_created_by
             ]);
             return ["status"=>0, "message"=>"Invalid number"]; 
         }
@@ -51,7 +61,8 @@ class AutoSelectSmsHelper
                 "target_name"=>$target_name,
                 "status_id"=>2,
                 "status_info"=>"SMS Sender API is currently disabled.",
-                "sms_client_api_request_link_id"=>($smsClient ? $smsClient->id : null)
+                "sms_client_api_request_link_id"=>($smsClient ? $smsClient->id : null),
+                "pay_created_by"=>$pay_created_by
             ]);
 
             return ["status"=>0, "message"=>"Inactive Sender"];
@@ -75,7 +86,8 @@ class AutoSelectSmsHelper
                 "target_name"=>"iprotek-messenger",
                 //"status_id"=>2,
                 //"status_info"=>"Invalid number provided",
-                "sms_client_api_request_link_id"=>($smsClient ? $smsClient->id : null)
+                "sms_client_api_request_link_id"=>($smsClient ? $smsClient->id : null),
+                "pay_created_by"=>$pay_created_by
             ]);
 
             $details = \iProtek\SmsSender\Helpers\MessengerSmsHelper::send([
@@ -84,7 +96,8 @@ class AutoSelectSmsHelper
                 "api_request_link_id"=>$smsClient->id,
                 "message"=>$message,
                 "target_id"=>$target_id,
-                "target_name"=>"iprotek-messenger"
+                "target_name"=>"iprotek-messenger",
+                "pay_created_by"=>$pay_created_by
             ]);
             
             if(is_object($details) && !is_array($details)){
