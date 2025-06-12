@@ -223,6 +223,23 @@ class PaySmsHelper
         $response = $client->post($url, ["body"=>$body]);
         return static::response_result($response, $raw_response, $error_default);
     }
+
+    public static function finalize_reponse_result($response){
+        $result = static::response_result($response, false, null);
+        if($result['status'] == 0){
+            if(!isset($result['message']) && $result['result']){
+            return ["status"=>0, "message"=> "Failed: ". json_encode( $result['result'])];
+            } 
+            return ["status"=>0, "message"=> "Failed: ".$result['message']];
+        }
+        else if($result['status'] == 1){
+            if($result['result']['status'] == 0)
+                return ["status"=>0, "message"=>"Failed: ".$result['result']['message']];
+            else
+                return ["status"=>1, "message"=>$result['result']['message']];            
+        }
+        return ["status"=>0, "message"=>"Request invalidated.", "response"=>$response ];
+    }
  
 
 }
