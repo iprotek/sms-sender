@@ -236,7 +236,7 @@ class PaySmsHelper
             if($result['result']['status'] == 0)
                 return ["status"=>0, "message"=>"Failed: ".$result['result']['message']];
             else
-                return ["status"=>1, "message"=>$result['result']['message']];            
+                return ["status"=>1, "message"=>"Webhook:".$result['result']['message']];            
         }
         return ["status"=>0, "message"=>"Request invalidated.", "response"=>$response ];
     }
