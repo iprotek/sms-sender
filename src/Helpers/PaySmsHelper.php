@@ -236,10 +236,10 @@ class PaySmsHelper
             }
             else if($result['status'] == 1){
                 if( is_array( $result['result'] ) ){
-                    if($result['result']['status'] == 0)
+                    if($result['result']['status'] != 1)
                         return ["status"=>0, "message"=>$result['result']['message']];
-                    else
-                        return ["status"=>1, "message"=>"Webhook:".$result['result']['message'], "data_id"=>$result['result']['data_id']];
+                    //RETURN SUCCESS
+                    return $result['result'];
                 }     
             }
 
