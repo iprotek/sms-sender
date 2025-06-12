@@ -254,7 +254,7 @@ class SmsClientApiRequestLinkController extends _CommonController
             "sms_sender_data_id"=>"required",
             "message"=>"required",
             "sms_api_request_link_id"=>"required",
-            "type"=>"required:received-sms,update-sms-api-request"
+            "type"=>"required|in:received-sms,update-sms-api-request"
         ]);
 
         
