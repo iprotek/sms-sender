@@ -249,7 +249,7 @@ class SmsClientApiRequestLinkController extends _CommonController
 
         $this->validate($request, [
             "from_mobile_no"=>"required",
-            "sender_id"=>"required",
+            "sms_sender_id"=>"required",
             "sms_sender_data_id"=>"required",
             "message"=>"required",
             "sms_api_request_link_id"=>"required"
