@@ -253,7 +253,8 @@ class SmsClientApiRequestLinkController extends _CommonController
             "sms_sender_id"=>"required",
             "sms_sender_data_id"=>"required",
             "message"=>"required",
-            "sms_api_request_link_id"=>"required"
+            "sms_api_request_link_id"=>"required",
+            "type"=>"required"
         ]);
 
         
@@ -262,16 +263,20 @@ class SmsClientApiRequestLinkController extends _CommonController
 
         //ACTION: add-message
         //ADD NEW MESSAGE
-
-        $received =  SmsClientReceivedMessage::create([
-            "from_number"=>$request->from_mobile_no,
-            "sender_id"=>$request->sms_sender_id,
-            "sms_sender_data_id"=>$request->sms_sender_data_id,
-            "message"=>$request->message,
-            "received_at"=>\Carbon\Carbon::now(),
-            "sms_client_api_request_link_id"=>$request->sms_client_api_id,
-            "sms_api_request_link_id"=>$request->sms_api_request_link_id
-        ]);
+        if($request->type == "received-sms"){
+            $received =  SmsClientReceivedMessage::create([
+                "from_number"=>$request->from_mobile_no,
+                "sender_id"=>$request->sms_sender_id,
+                "sms_sender_data_id"=>$request->sms_sender_data_id,
+                "message"=>$request->message,
+                "received_at"=>\Carbon\Carbon::now(),
+                "sms_client_api_request_link_id"=>$request->sms_client_api_id,
+                "sms_api_request_link_id"=>$request->sms_api_request_link_id
+            ]);
+        }
+        else{
+            return ["status"=>0, "message"=>"Unknown Request type"];
+        }
 
         //SEND NOTIFICATIONS
 
