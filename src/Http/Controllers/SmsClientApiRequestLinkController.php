@@ -247,7 +247,7 @@ class SmsClientApiRequestLinkController extends _CommonController
             abort(403, 'SMS API WEBHOOK INACTTIVE');
         }
 
-        $this->validated($request, [
+        $this->validate($request, [
             "from_mobile_no"=>"required",
             "sender_id"=>"required",
             "sms_sender_data_id"=>"required",
