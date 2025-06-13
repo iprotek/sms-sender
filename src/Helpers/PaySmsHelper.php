@@ -54,16 +54,24 @@ class PaySmsHelper
             $pay_created_by = $request->header('PAY-USER-ACCOUNT-ID');
         }
 
-
-
-        $smsMessage = SmsClientMessage::create([
+        $requestData = [
             "pay_created_by"=>$pay_created_by,
             "to_number"=>$to_number,
             "message"=>$message,
             "target_id"=>$target_id,
             "target_name"=>$target_name,
             "sms_client_api_request_link_id"=>($smsClient ? $smsClient->id : null)
-        ]);  
+        ];
+
+        //SOURCE ADDITIVES
+        if($request){
+            $requestData["client_id"] = $request->header('CLIENT-ID');
+            $requestData["source_name"] = $request->header('SOURCE-NAME');
+            $requestData["source_url"] = $request->header('SOURCE-URL');
+        }
+
+
+        $smsMessage = SmsClientMessage::create($requestData);  
 
         if($smsClient == null){
 
@@ -154,7 +162,10 @@ class PaySmsHelper
             'Content-Type' => 'application/json',
             "NAME" => $name,
             "USERNAME" => $username,
-            "PASSWORD" => $password
+            "PASSWORD" => $password,
+            "CLIENT-ID"=>config('iprotek.pay_client_id'),
+            "SOURCE-URL"=>config('app.url'),
+            "SOURCE-NAME"=>config('app.name'),
         ];
         
         $client = new \GuzzleHttp\Client([

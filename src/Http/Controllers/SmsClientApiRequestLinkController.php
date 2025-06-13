@@ -271,7 +271,10 @@ class SmsClientApiRequestLinkController extends _CommonController
                 "message"=>$request->message,
                 "received_at"=>\Carbon\Carbon::now(),
                 "sms_client_api_request_link_id"=>$request->sms_client_api_id,
-                "sms_api_request_link_id"=>$request->sms_api_request_link_id
+                "sms_api_request_link_id"=>$request->sms_api_request_link_id,
+                "client_id"=>$request->header('CLIENT-ID'),
+                "source_name"=>$request->header('SOURCE-NAME'),
+                "source_url"=>$request->header('SOURCE-URL')
             ]);
         }
         else{

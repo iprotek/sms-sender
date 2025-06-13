@@ -29,7 +29,7 @@ class M360Sms349ApiHelper
         return $client;
     }
 
-    public static function send(SmsClientApiRequestLink $api, $to_cp_no, $message, $target_id = 0 ){
+    public static function send(SmsClientApiRequestLink $api, $to_cp_no, $message, $target_id = 0, Request $request = null ){
         
         if($api->type != 'm360'){
             return  response()->json(["status"=>0, "message"=>"Invalid API Type" ], 403);
@@ -41,15 +41,22 @@ class M360Sms349ApiHelper
         //broadcast
         $client = static::client();
 
-
-        //ADD SENDING RECORD
-        $smsMessage = SmsClientMessage::create([
+        $requestData = [
             "to_number"=>$to_cp_no,
             "message"=>$message,
             "target_id"=>$target_id,
             "target_name"=>"m360",
             "sms_client_api_request_link_id"=>$api->id
-        ]); 
+        ];
+        
+        if($request){
+            $requestData["client_id"] = $request->header('CLIENT-ID');
+            $requestData["source_name"] = $request->header('SOURCE-NAME');
+            $requestData["source_url"] = $request->header('SOURCE-URL');
+        }
+
+        //ADD SENDING RECORD
+        $smsMessage = SmsClientMessage::create($requestData); 
  
         $request_body = [
             "app_key"=>$api->api_username,

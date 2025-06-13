@@ -54,6 +54,16 @@ class SmsClientReceivedMessage extends Model
 
             //FORCE CONSTRAINT TO UNIFIED NUMBER OF +63, 63 and 0
             $model->from_number =  $mobile_info->mobile_no;
+            
+            if(!$model->client_id ){
+                $model->client_id = config('iprotek.pay_client_id');
+            }
+            if(!$model->source_url){
+                $model->source_url = config('app.url');
+            }
+            if(!$model->source_name){
+                $model->source_name = config('app.name');
+            }
 
             // Example: Add or modify a value before insert
             //$model->slug = Str::slug($model->name);
