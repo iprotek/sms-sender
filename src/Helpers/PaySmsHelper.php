@@ -9,9 +9,17 @@ use Illuminate\Http\Request;
 use iProtek\SmsSender\Models\SmsClientApiRequestLink;
 use iProtek\SmsSender\Models\SmsClientMessage;
 use iProtek\Core\Helpers\PayModelHelper;
+use iProtek\SmsSender\Models\SmsClientMobileNoInfo;
+use Illuminate\Database\Eloquent\Model;
 
 class PaySmsHelper
 {
+    
+    public static function isValidInternationalMobile($number) {
+        // Check format: starts with + and digits only OR starts with 0 and digits only
+        return preg_match('/^(?:\+?[1-9]\d{7,14}|0\d{9,10})$/', $number);
+    }
+
     public static function checkApi($api_url, $api_name, $api_username, $api_pass){
 
 
@@ -269,6 +277,27 @@ class PaySmsHelper
 
         }
         return ["status"=>0, "message"=>"Request invalidated.", "response"=>$response ];
+    }
+
+    public static function constraint_mobile_no($mobile_no, Model $model = null, bool $force_create_if_null = false){
+        $mobile_info = null;
+        if(strlen( trim($mobile_no)) > 10){
+            $mobile_info = SmsClientMobileNoInfo::whereRaw("mobile_no LIKE CONCAT('%', RIGHT(?, 10)) ",[$mobile_no])->first();
+        }
+        else{
+            $mobile_info = SmsClientMobileNoInfo::whereRaw(" mobile_no = ? ", [$mobile_no])->first();
+        }
+        
+        if(!$mobile_info && $force_create_if_null){
+            $mobile_info = SmsClientMobileNoInfo::create([
+                "pay_created_by"=> $model ? $model->pay_created_by : null,
+                "group_id"=> $model ? $model->group_id : null,
+                "branch_id"=> $model ? $model->branch_id : null,
+                "mobile_no"=> $mobile_no
+            ]);
+        }
+
+        return $mobile_info;
     }
  
 

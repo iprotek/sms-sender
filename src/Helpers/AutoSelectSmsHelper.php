@@ -13,7 +13,7 @@ class AutoSelectSmsHelper
 { 
     public static function isValidInternationalMobile($number) {
         // Check format: starts with + and digits only OR starts with 0 and digits only
-        return preg_match('/^(?:\+?[1-9]\d{7,14}|0\d{9,10})$/', $number);
+        return PaySmsHelper::isValidInternationalMobile($number);
     }
  
     public static function iprotek_sms_sender($mobile_no, $message, $target_id ){

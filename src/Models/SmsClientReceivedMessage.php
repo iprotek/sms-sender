@@ -35,21 +35,9 @@ class SmsClientReceivedMessage extends Model
         static::creating(function ($model) {
             // Access model values before inserting
             //logger('Creating model:', $model->toArray());
+            
             //CHECK THE NUMBER IF EXISTS
-            if(strlen( trim($model->to_number)) > 10){
-                $mobile_info = SmsClientMobileNoInfo::whereRaw("mobile_no LIKE CONCAT('%', RIGHT(?, 10)) ",[$model->from_number])->first();
-            }
-            else{
-                $mobile_info = SmsClientMobileNoInfo::whereRaw(" mobile_no = ? ", [$model->from_number])->first();
-            }
-            if(!$mobile_info){
-                $mobile_info = SmsClientMobileNoInfo::create([
-                    "pay_created_by"=>$model->pay_created_by,
-                    "group_id"=>$model->group_id,
-                    "branch_id"=>$model->branch_id,
-                    "mobile_no"=>$model->from_number
-                ]);
-            }
+            $mobile_info = PaySmsHelper::constraint_mobile_no($model->from_number, $model, true);
 
 
             //FORCE CONSTRAINT TO UNIFIED NUMBER OF +63, 63 and 0
