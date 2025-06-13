@@ -281,7 +281,7 @@ class PaySmsHelper
 
     public static function constraint_mobile_no($mobile_no, Model $model = null, bool $force_create_if_null = false){
         $mobile_info = null;
-        if(strlen( trim($mobile_no)) > 10){
+        if(strlen( trim($mobile_no)) >= 10){
             $mobile_info = SmsClientMobileNoInfo::whereRaw("mobile_no LIKE CONCAT('%', RIGHT(?, 10)) ",[$mobile_no])->first();
         }
         else{
