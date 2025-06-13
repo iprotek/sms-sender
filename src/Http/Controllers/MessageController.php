@@ -67,5 +67,37 @@ class MessageController extends Controller
         return $result; 
     }
 
+    public function get_sms_message(Request $request){
+
+        $proxy_group_id = 0;
+        
+        if(auth()->check()){
+            $user = auth()->user();
+            $pay_account = \iProtek\Core\Models\UserAdminPayAccount::where('user_admin_id', $user->id)->first();
+            if( $pay_account ){ 
+                $proxy_group_id = $pay_account->own_proxy_group_id;
+            }
+        }
+        //return '/api/group/'.$proxy_group_id.'/dm/'.$request->contact_id;
+        $result = \iProtek\SmsSender\Helpers\PayMessageHttp::get_client('/api/group/'.$proxy_group_id.'/sms/contact/'.$request->mobile_no);
+        return $result; 
+    }
+
+    public function post_sms_message(Request $request){
+
+        $proxy_group_id = 0;
+        
+        if(auth()->check()){
+            $user = auth()->user();
+            $pay_account = \iProtek\Core\Models\UserAdminPayAccount::where('user_admin_id', $user->id)->first();
+            if( $pay_account ){ 
+                $proxy_group_id = $pay_account->own_proxy_group_id;
+            }
+        }
+        //return '/api/group/'.$proxy_group_id.'/dm/'.$request->contact_id;
+        $result = \iProtek\SmsSender\Helpers\PayMessageHttp::post_client('/api/group/'.$proxy_group_id.'/sms/contact/'.$request->mobile_no, ["message"=>$request->message]);
+        return $result; 
+    }
+
 
 }

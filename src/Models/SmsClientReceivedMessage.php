@@ -23,7 +23,10 @@ class SmsClientReceivedMessage extends Model
         "received_at",
         "sms_sender_data_id",
         "seen_at",
-        "seen_by_pay_account_id"
+        "seen_by_pay_account_id",
+        "client_id",
+        "source_name",
+        "source_url"
     ];
 
 

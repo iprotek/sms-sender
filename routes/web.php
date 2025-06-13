@@ -61,11 +61,6 @@ Route::middleware(['web'])->group(function(){
             Route::get('/', [SmsTicketController::class, 'helpdesk']); 
         });
 
-
-
-
-
-
     });
     
     Route::prefix('helpdesk')->name('helpdesk')->group(function(){

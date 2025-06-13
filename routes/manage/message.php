@@ -11,4 +11,9 @@ Route::prefix('message')->name('.message')->group(function(){
         Route::get('contact/{contact_id}', [MessageController::class, 'get_contact_message'])->name('.get-contact');
         Route::post('contact/{contact_id}', [MessageController::class, 'post_contact_message'])->name('.post-contact');
     });
+
+    Route::prefix('sms')->name('.sms')->group(function(){
+        Route::get('contact/{mobile_no}', [MessageController::class, 'get_sms_message'])->name('.get-contact');
+        Route::post('contact/{mobile_no}', [MessageController::class, 'post_sms_message'])->name('.post-contact');
+    });
 });
