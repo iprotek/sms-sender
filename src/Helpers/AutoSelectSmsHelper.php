@@ -16,11 +16,11 @@ class AutoSelectSmsHelper
         return PaySmsHelper::isValidInternationalMobile($number);
     }
  
-    public static function iprotek_sms_sender($mobile_no, $message, $target_id ){
+    public static function iprotek_sms_sender($mobile_no, $message, $target_id, Request $request = null ){
 
         //SENDING SMS
         return 
-        \iProtek\SmsSender\Helpers\PaySmsHelper::send($mobile_no, $message, null, $target_id, "iprotek-sms-sender");
+        \iProtek\SmsSender\Helpers\PaySmsHelper::send($mobile_no, $message, null, $target_id, "iprotek-sms-sender", $request);
     
     
     }
@@ -138,7 +138,7 @@ class AutoSelectSmsHelper
         }
 
         //DEFAULT  IPROTEK
-        return static::iprotek_sms_sender($mobile_no, $message, $target_id);
+        return static::iprotek_sms_sender($mobile_no, $message, $target_id, $request);
 
 
 
