@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Support\Facades\Log;
+use iProtek\SmsSender\Helpers\PaySmsHelper;
 
 class SmsClientReceivedMessage extends Model
 {
