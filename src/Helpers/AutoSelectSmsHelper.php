@@ -50,7 +50,7 @@ class AutoSelectSmsHelper
                 "sms_client_api_request_link_id"=>($smsClient ? $smsClient->id : null),
                 "pay_created_by"=>$pay_created_by
             ]);
-            return ["status"=>0, "message"=>"Invalid number"]; 
+            return ["status"=>0, "message"=>"Invalid number", "data"=>$smsMessage]; 
         }
         else if(!$smsClient->is_active){
 
@@ -65,15 +65,15 @@ class AutoSelectSmsHelper
                 "pay_created_by"=>$pay_created_by
             ]);
 
-            return ["status"=>0, "message"=>"Inactive Sender"];
+            return ["status"=>0, "message"=>"Inactive Sender", "data"=>$smsMessage];
         }
  
  
         if($smsClient->type == "m360"){            
             
-            $details = M360Sms349ApiHelper::send($smsClient, $mobile_no, $message, $target_id, $request);
-            
-            return ["status"=>1, "message"=>"m360 sms submitted."];
+            $details = M360Sms349ApiHelper::send($smsClient, $mobile_no, $message, $target_id, $request, false);
+            return $details;
+            //return ["status"=>1, "message"=>"m360 sms submitted."];
             
         }
         else if($smsClient->type == "iprotek-messenger"){

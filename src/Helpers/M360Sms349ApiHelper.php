@@ -29,12 +29,18 @@ class M360Sms349ApiHelper
         return $client;
     }
 
-    public static function send(SmsClientApiRequestLink $api, $to_cp_no, $message, $target_id = 0, Request $request = null ){
+    public static function send(SmsClientApiRequestLink $api, $to_cp_no, $message, $target_id = 0, Request $request = null, $is_json_response = true ){
         
         if($api->type != 'm360'){
+            if(!$is_json_response){
+                return ["status"=>0, "message"=>"Invalid API Type" ];
+            }
             return  response()->json(["status"=>0, "message"=>"Invalid API Type" ], 403);
         }
         else if($api->api_version != static::$version){
+            if(!$is_json_response){
+                return ["status"=>0, "message"=>"Invalid API M360 Version" ];
+            }
             return  response()->json(["status"=>0, "message"=>"Invalid API M360 Version" ], 403);
         }
 
@@ -86,9 +92,15 @@ class M360Sms349ApiHelper
         $smsMessage->save();
         
         if($response_code != 200 && $response_code != 201){
+            if(!$is_json_response){
+                return ["status"=>0, "message"=>"Failed", "data"=>$result ];
+            }
            return response()->json(["status"=>0, "message"=>"Failed", "data"=>$result ], $response_code);
         }
         
+        if(!$is_json_response){
+            return ["status"=>1, "message"=>"Successfully Rendered", "data"=>$result];
+        }
         return response()->json(["status"=>1, "message"=>"Successfully Rendered", "data"=>$result], $response_code);
 
     }
