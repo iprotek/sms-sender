@@ -71,7 +71,7 @@ class AutoSelectSmsHelper
  
         if($smsClient->type == "m360"){            
             
-            $details = M360Sms349ApiHelper::send($smsClient, $mobile_no, $message, $target_id);
+            $details = M360Sms349ApiHelper::send($smsClient, $mobile_no, $message, $target_id, $request);
             
             return ["status"=>1, "message"=>"m360 sms submitted."];
             
