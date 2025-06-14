@@ -53,6 +53,7 @@ class M360Sms349ApiHelper
             $requestData["client_id"] = $request->header('CLIENT-ID');
             $requestData["source_name"] = $request->header('SOURCE-NAME');
             $requestData["source_url"] = $request->header('SOURCE-URL');
+            $requestData['pay_created_by'] = $request->header('PAY-USER-ACCOUNT-ID');
         }
 
         //ADD SENDING RECORD
