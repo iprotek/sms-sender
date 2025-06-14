@@ -185,13 +185,7 @@ class SmsClientApiRequestLinkController extends _CommonController
             }]
         ]);
 
-
         return \iProtek\SmsSender\Helpers\AutoSelectSmsHelper::send($request->to_number, $request->message, $sms_api_client_id, 0);
-
-        //$result = \iProtek\SmsSender\Helpers\PaySmsHelper::send($request->to_number, $request->message, $sms_api_client_id, null, null, $request);
-
-        //return $result;
-        //return ["status"=>1, "message"=>"Request sent successfully"];
     }
 
     public function update_client(Request $request, SmsClientApiRequestLink $sms_api_client_id){
