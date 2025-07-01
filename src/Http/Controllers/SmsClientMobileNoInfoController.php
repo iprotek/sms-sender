@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace iProtek\SmsSender\Http\Controllers;
 
 use Illuminate\Http\Request;
 use iProtek\Core\Http\Controllers\_Common\_CommonController;
