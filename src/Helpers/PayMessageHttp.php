@@ -5,7 +5,7 @@ namespace iProtek\SmsSender\Helpers;
 use DB; 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
-//use iProtek\Core\Models\UserAdminPayAccount;
+use iProtek\Core\Models\UserAdminPayAccount;
 
 class PayMessageHttp
 {
@@ -52,7 +52,15 @@ class PayMessageHttp
         
         if(auth()->check()){
             $user = auth()->user();
-            $pay_account = \iProtek\Core\Models\UserAdminPayAccount::where('user_admin_id', $user->id)->first();
+            $user_admin_id = $user->id;
+            $session_id = session()->getId();
+            $pay_account = null;
+            if($session_id)
+                $pay_account = \iProtek\Core\Models\UserAdminPayAccount::where(['user_admin_id'=>$user_admin_id, 'browser_session_id'=>$session_id])->first();
+    
+            if(!$pay_account)
+                $pay_account = UserAdminPayAccount::where('user_admin_id', $user->id)->first();
+
             if( $pay_account ){ 
                 $proxy_id = $pay_account->own_proxy_group_id;
                 $pay_app_user_account_id = $pay_account->pay_app_user_account_id;

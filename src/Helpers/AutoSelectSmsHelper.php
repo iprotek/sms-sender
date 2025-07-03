@@ -5,9 +5,9 @@ namespace iProtek\SmsSender\Helpers;
 use DB; 
 use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Request;
-//use iProtek\Core\Models\UserAdminPayAccount;
 use iProtek\SmsSender\Models\SmsClientApiRequestLink;
 use iProtek\SmsSender\Models\SmsClientMessage;
+use iProtek\Core\Models\UserAdminPayAccount;
 
 class AutoSelectSmsHelper
 { 
@@ -29,7 +29,16 @@ class AutoSelectSmsHelper
 
         $pay_created_by = null;
         if(auth('admin')->check()){
-            $pay_account = \iProtek\Core\Models\UserAdminPayAccount::where('user_admin_id', auth('admin')->user()->id)->first();
+            
+            $user_admin_id = auth('admin')->user()->id;
+            $session_id = session()->getId();
+            $pay_account = null;
+            if($session_id)
+                $pay_account = \iProtek\Core\Models\UserAdminPayAccount::where(['user_admin_id'=>$user_admin_id, 'browser_session_id'=>$session_id])->first();
+    
+            if(!$pay_account)
+                $pay_account = UserAdminPayAccount::where('user_admin_id', $user_admin_id)->first();
+
             if($pay_account != null){
                 $pay_created_by = $pay_account->pay_app_user_account_id;
             }
