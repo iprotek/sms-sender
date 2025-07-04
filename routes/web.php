@@ -12,7 +12,7 @@ include(__DIR__.'/api.php');
 
 Route::middleware(['web'])->group(function(){
  
-    Route::middleware(['auth'])->prefix('manage')->name('manage')->group(function(){
+    Route::middleware(['auth:admin'])->prefix('manage')->name('manage')->group(function(){
         
         Route::prefix('sms-sender')->name('.sms-sender')->group(function(){
 
