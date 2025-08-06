@@ -31,6 +31,5 @@
                 "iProtek\\SmsSender\\SmsSenderPackageServiceProvider"
             ]
         }
-    },
-    "version": "1.0.0" 
+    }
 }
