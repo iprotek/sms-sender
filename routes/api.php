@@ -5,7 +5,7 @@ use iProtek\Core\Http\Controllers\Manage\FileUploadController;
 use iProtek\Core\Http\Controllers\AppVariableController;
 use iProtek\SmsSender\Http\Controllers\MessageController;
 use iProtek\SmsSender\Http\Controllers\SmsClientApiRequestLinkController;
-
+use iProtek\SmsSender\Http\Controllers\SmsController;
 //Route::prefix('sms-sender')->name('sms-sender')->group(function(){
   //  Route::get('/', [SmsController::class, 'index'])->name('.index');
 //});
@@ -36,12 +36,19 @@ Route::prefix('api')->middleware('api')->name('api')->group(function(){
       });
 
       //GET RESPONSE FROM SENDER
-      Route::post('response/{sms_client_api_id}', [SmsClientApiRequestLinkController::class, 'api_response'])->name('.response')->middleware(['signed']);
+      Route::post('response/{sms_client_api_id}', [
+        "uses"=>[SmsClientApiRequestLinkController::class, 'api_response'],
+        "description"=>"Get response from sms sender",
+        "is_visible"=>false,
+        "is_allow"=>true
+      ])->name('.response')->middleware(['signed']);
 
-      
     });
-    
 
-
-    Route::get('push-info', [\iProtek\SmsSender\Http\Controllers\SmsController::class, 'push_info'])->name('push-info');
+    Route::get('push-info', [
+      "uses"=>[SmsController::class, 'push_info'],
+      "description"=>"Get push info for messaging such as websocket",
+      "is_visible"=>false,
+      "is_allow"=>true
+    ])->name('push-info');
 }); 
