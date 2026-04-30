@@ -36,19 +36,17 @@ Route::prefix('api')->middleware('api')->name('api')->group(function(){
       });
 
       //GET RESPONSE FROM SENDER
-      Route::post('response/{sms_client_api_id}', [
-        "uses"=>[SmsClientApiRequestLinkController::class, 'api_response'],
-        "description"=>"Get response from sms sender",
-        "is_visible"=>false,
-        "is_allow"=>true
-      ])->name('.response')->middleware(['signed']);
+      Route::post('response/{sms_client_api_id}',  [SmsClientApiRequestLinkController::class, 'api_response'])
+        ->defaults("_description", "Get response from sms sender")
+        ->defaults("_is_visible", false)
+        ->defaults("_is_allow", true)
+        ->name('.response')->middleware(['signed']);
 
     });
 
-    Route::get('push-info', [
-      "uses"=>[SmsController::class, 'push_info'],
-      "description"=>"Get push info for messaging such as websocket",
-      "is_visible"=>false,
-      "is_allow"=>true
-    ])->name('push-info');
+    Route::get('push-info', [SmsController::class, 'push_info'])
+      ->defaults("_description", "Get push info for messaging such as websocket")
+      ->defaults("_is_visible", false)
+      ->defaults("_is_allow", true)
+      ->name('push-info');
 }); 
