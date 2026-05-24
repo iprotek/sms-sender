@@ -55,7 +55,9 @@ class SocketHelper
                             "secret"=>$socket_settings->secret,
                             "cluster"=>$socket_settings->cluster,
                             "url"=>$socket_settings->url,
-                            "app_id"=>$socket_settings->app_id
+                            "app_id"=>$socket_settings->app_id,
+                            "sms_channel"=>$socket_settings->sms_channel,
+                            "chat_channel"=> $socket_settings->chat_channel ?? "chat-channel"
                         ];
                     }
                     return [
@@ -64,7 +66,9 @@ class SocketHelper
                         "key"=>$socket_settings->key,
                         "cluster"=>$socket_settings->cluster,
                         "url"=>$socket_settings->url,
-                        "app_id"=>$socket_settings->app_id
+                        "app_id"=>$socket_settings->app_id,
+                        "sms_channel"=>$socket_settings->sms_channel,
+                        "chat_channel"=>$socket_settings->chat_channel ?? "chat-channel"
                     ];
                 }
             }
