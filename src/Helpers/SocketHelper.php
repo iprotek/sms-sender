@@ -31,6 +31,8 @@ class SocketHelper
                             "secret"=>isset($socket_settings['secret']) ? $socket_settings['secret']:"",
                             "cluster"=>isset($socket_settings['cluster']) ? $socket_settings['cluster'] :"",
                             "url"=>isset($socket_settings['url']) ? $socket_settings['url'] :"",
+                            "sms_channel"=>$socket_settings['sms_channel'] ?? "sms-channel",
+                            "chat_channel"=> $socket_settings['chat_channel'] ?? "chat-channel"
                         ];
                     }
                     return [
@@ -39,7 +41,9 @@ class SocketHelper
                         "key"=>isset($socket_settings['key']) ? $socket_settings['key']:"",
                         "cluster"=>isset($socket_settings['cluster']) ? $socket_settings['cluster'] :"",
                         "url"=>isset($socket_settings['url']) ? $socket_settings['url'] :"",
-                        "app_id"=>isset($socket_settings['app_id']) ? $socket_settings['app_id'] :""
+                        "app_id"=>isset($socket_settings['app_id']) ? $socket_settings['app_id'] :"",
+                        "sms_channel"=>$socket_settings['sms_channel'] ?? "sms-channel",
+                        "chat_channel"=> $socket_settings['chat_channel'] ?? "chat-channel"
                     ];
                 }
             }
