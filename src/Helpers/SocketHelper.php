@@ -44,7 +44,7 @@ class SocketHelper
                         "app_id"=>isset($socket_settings['app_id']) ? $socket_settings['app_id'] :"",
                         "sms_channel"=>$socket_settings['sms_channel'] ?? "sms-channel",
                         "chat_channel"=> $socket_settings['chat_channel'] ?? "chat-channel",
-                        "secret"=>$socket_settings->secret
+                        "secret"=> $socket_settings['secret'] ?? "secret"
                     ];
                 }
             }
