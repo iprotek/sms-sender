@@ -44,7 +44,7 @@ Route::prefix('api')->middleware('api')->name('api')->group(function(){
 
     });
 
-    Route::get('push-info', [SmsController::class, 'push_info'])
+    Route::middleware(['pay_app_check'])->get('push-info', [SmsController::class, 'push_info'])
       ->defaults("_description", "Get push info for messaging such as websocket")
       ->defaults("_is_visible", false)
       ->defaults("_is_allow", true)
