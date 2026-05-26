@@ -72,7 +72,8 @@ class SocketHelper
                         "url"=>$socket_settings->url,
                         "app_id"=>$socket_settings->app_id,
                         "sms_channel"=>$socket_settings->sms_channel,
-                        "chat_channel"=>$socket_settings->chat_channel ?? "chat-channel"
+                        "chat_channel"=>$socket_settings->chat_channel ?? "chat-channel",
+                        "secret"=>$socket_settings->secret
                     ];
                 }
             }
