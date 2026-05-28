@@ -12,7 +12,7 @@
     -->
 @endsection
 @section('content') 
-  <div id="main-content">
+  <div>
     
   <?php
       $user_id = auth()->user()->id;
@@ -22,15 +22,22 @@
       {
         $group_id = $pay_account->default_proxy_group_id;
       }
+      
+      $jsonData = json_encode( [
+        "group_id" => $group_id
+      ] );
     ?>
-    <sms-sender-view group_id="{{$group_id}}"></sms-sender-view>
      
+  <div id="main-content"
+      data-props='{{$jsonData}}'
+      >
+  </div>
 
   </div>
    
 @endsection
 
-@section('foot') 
-    <script src="/iprotek/js/manage/sms-sender/sms-sender.js?v=1.0"></script>
+@section('foot')
+    @vite('resources/js/manage/sms-sender.js', 'iprotek/build')
 @endsection
 

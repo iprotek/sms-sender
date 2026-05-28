@@ -9,6 +9,8 @@ use iProtek\SmsSender\Models\SmsClientApiRequestLink;
 use iProtek\Core\Http\Controllers\_Common\_CommonController;
 use iProtek\SmsSender\Helpers\PaySmsHelper;
 use iProtek\SmsSender\Models\SmsClientReceivedMessage;
+use iProtek\SmsSender\Models\SmsClientMessage;
+use Illuminate\Support\Facades\Log;
 
 class SmsClientApiRequestLinkController extends _CommonController
 {
@@ -239,8 +241,30 @@ class SmsClientApiRequestLinkController extends _CommonController
 
     public function api_response(Request $request){
         $sms_client_api = SmsClientApiRequestLink::where('is_active', 1)->where('is_webhook_active', 1)->find($request->sms_client_api_id);
+        
         if(!$sms_client_api){
             abort(403, 'SMS API WEBHOOK INACTTIVE');
+        }
+        
+        if($request->action == "update-batch"){
+
+            //Log::error($request->data);
+            foreach($request->data as $item){
+                
+                //Log::error($item);
+                $smsClient = SmsClientMessage::where('data_id', $item['message_id'])
+                ->where('sms_api_request_link_id', $item['api_request_link_id'])
+                ->first();
+
+                if($smsClient){
+                    $smsClient->status_id = $item['status'] == 1 ? 1 : 2;
+                    $smsClient->status_info = $item['message'];
+                    $smsClient->save();
+                }
+
+            }
+
+            return [ "status"=>1, "message"=>"Successfully batch updated." ];
         }
 
         $this->validate($request, [

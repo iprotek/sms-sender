@@ -37,7 +37,7 @@ Route::prefix('api')->middleware('api')->name('api')->group(function(){
 
       //GET RESPONSE FROM SENDER
       Route::post('response/{sms_client_api_id}',  [SmsClientApiRequestLinkController::class, 'api_response'])
-        ->defaults("_description", "Get response from sms sender")
+        ->defaults("_description", "Get response from sms sender thru signed webhook.")
         ->defaults("_is_visible", false)
         ->defaults("_is_allow", true)
         ->name('.response')->middleware(['signed']);
