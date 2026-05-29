@@ -14,7 +14,7 @@ return new class extends Migration
         //
         Schema::table('sms_client_api_request_links', function (Blueprint $table) {
 
-            $table->string('local_webhook_response_url')->nullable();
+            $table->text('local_webhook_response_url')->nullable();
         
         });
     }
