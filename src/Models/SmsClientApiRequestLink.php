@@ -28,6 +28,7 @@ class SmsClientApiRequestLink extends _CommonModel
         "priority",
         "last_sending_at",
         "is_auto",
+        "local_webhook_response_url",
         
         "type",
         "header_info",

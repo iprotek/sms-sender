@@ -139,8 +139,19 @@ class SmsClientApiRequestLinkController extends _CommonController
         */ 
         //CREATE LINK
         $data->webhook_response_url = URL::signedRoute(
-            'api.sms-sender.response', [ 'sms_client_api_id'=> $data->id ]
+            'api.sms-sender.response', 
+            [ 'sms_client_api_id'=> $data->id ],
+
         );
+        //
+        $data->local_webhook_response_url = config('iprotek.app_url').URL::signedRoute(
+            'api.sms-sender.response', 
+            [ 'sms_client_api_id'=> $data->id ],
+            null,
+            false
+        );
+
+
         $data->save();
 
 
