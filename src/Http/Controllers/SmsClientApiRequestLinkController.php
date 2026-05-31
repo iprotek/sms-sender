@@ -254,6 +254,7 @@ class SmsClientApiRequestLinkController extends _CommonController
         $sms_client_api = SmsClientApiRequestLink::where('is_active', 1)->where('is_webhook_active', 1)->find($request->sms_client_api_id);
         
         if(!$sms_client_api){
+            return ["status"=>0, "message"=>"Sms API Webhook Inactive."];
             abort(403, 'SMS API WEBHOOK INACTTIVE');
         }
         

@@ -96,7 +96,7 @@ class MessageController extends Controller
         
         if(auth()->check()){
             $user = auth()->user();
-            $pay_account = \iProtek\Core\Models\UserAdminPayAccount::where('user_admin_id', $user->id)->first();
+            $pay_account = \iProtek\Core\Models\UserAdminPayAccount::where('user_admin_id', $user->id)->orderBy('id', 'DESC')->first();
             if( $pay_account ){ 
                 $proxy_group_id = $pay_account->own_proxy_group_id;
             }
